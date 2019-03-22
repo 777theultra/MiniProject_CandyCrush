@@ -16,7 +16,7 @@ using std::string;
 #include <iomanip> 
 using std::setw;
 
-//Sync test ~ K
+//Sync test (2) ~ K
 class candycrush
 {
 public:
