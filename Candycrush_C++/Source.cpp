@@ -127,7 +127,7 @@ public:
 			{
 				if (candy[y][x] == candy[y][x + 1] && candy[y][x] == candy[y][x + 2])
 				{
-					for (int z = 3; x + z < 5; z++)
+					for (int z = 3; x + z <= 5; z++)
 					{
 						if (candy[y][x] == candy[y][x + z])
 						{
@@ -147,7 +147,7 @@ public:
 			{
 				if (candy[y][x] == candy[y + 1][x] && candy[y][x] == candy[y + 2][x])
 				{
-					for (int z = 3; y + z < 5; z++)
+					for (int z = 3; y + z <= 5; z++)
 					{
 						if (candy[y][x] == candy[y + z][x])
 						{
@@ -164,16 +164,21 @@ public:
 	}
 	void gravity()
 	{
-		for (int layers = 1; layers <= 5; layers++)
+		for (int y = 4; y >= 0; y--)
 		{
-			for (int y = 4; y >= 0; y--)
+			for (int x = 0; x <= 5; x++)
 			{
-				for (int x = 0; x <= 5; x++)
+				if (candy[y + 1][x] == 0)
 				{
-					if (candy[y + 1][x] == 0)
+					int	fall = 1;
+					for (int z = 2; y + z <= 5; z++)
 					{
-						swap(candy[y][x], candy[y + 1][x]);
+						if (candy[y + z][x] == 0)
+						{
+							fall = z;
+						}
 					}
+					swap(candy[y][x], candy[y + fall][x]);
 				}
 			}
 		}
@@ -191,12 +196,27 @@ public:
 			}
 		}
 	}
+	int score(int score)
+	{
+		for (int y = 0; y <= 5; y++)
+		{
+			for (int x = 0; x <= 5; x++)
+			{
+				if (candy[y][x] == 0)
+				{
+					score = score + 10;
+				}
+			}
+		}
+		return score;
+	}
 };
 
 int main()
 {
 	candycrush game;
 	int match = 1;
+	int score = 0;
 	int exchange[2];
 	string exchangedir;
 	srand(time(0));
@@ -217,12 +237,13 @@ int main()
 		while (match == 1)
 		{
 			game.destory();
+			score = game.score(score);
 			game.gravity();
 			game.fill();
 			match = game.check();
 		}
 		game.print_field();
-
+		cout << "Your current score is " << score << endl;
 	}
 	return 0;
 }
