@@ -133,6 +133,10 @@ public:
 						{
 							candy[y][x + z] = 0;
 						}
+						else
+						{
+							break;
+						}
 					}
 					candy[y][x] = 0;
 					candy[y][x + 1] = 0;
@@ -152,6 +156,10 @@ public:
 						if (candy[y][x] == candy[y + z][x])
 						{
 							candy[y + z][x] = 0;
+						}
+						else
+						{
+							break;
 						}
 					}
 					candy[y][x] = 0;
