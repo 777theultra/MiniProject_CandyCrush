@@ -53,6 +53,7 @@ public:
 			else
 			{
 				swap(candy[exchange[0]][exchange[1]], candy[exchange[0] - 1][exchange[1]]);
+				return check();
 			}
 		}
 		else if (exchangedir == "down" && exchange[0] < 5)
@@ -65,6 +66,7 @@ public:
 			else
 			{
 				swap(candy[exchange[0]][exchange[1]], candy[exchange[0] + 1][exchange[1]]);
+				return check();
 			}
 		}
 		else if (exchangedir == "right" && exchange[1] < 5)
@@ -77,6 +79,7 @@ public:
 			else
 			{
 				swap(candy[exchange[0]][exchange[1]], candy[exchange[0]][exchange[1] + 1]);
+				return check();
 			}
 		}
 		else if (exchangedir == "left" && exchange[1] > 0)
@@ -89,6 +92,7 @@ public:
 			else
 			{
 				swap(candy[exchange[0]][exchange[1]], candy[exchange[0]][exchange[1] - 1]);
+				return check();
 			}
 		}
 	}
@@ -117,9 +121,10 @@ public:
 		}
 		return match;
 	}
-	void destory()
+	int destory(int game_mode_B)
 	{
 		int match = 0;
+		int cleared = 0;
 		for (int y = 0; y <= 5; y++)
 		{
 			for (int x = 0; x <= 3; x++)
@@ -130,6 +135,10 @@ public:
 					{
 						if (candy[y][x] == candy[y][x + z])
 						{
+							if (candy[y][x] == game_mode_B)
+							{
+								cleared++;
+							}
 							candy[y][x + z] = 0;
 						}
 						else
@@ -137,10 +146,13 @@ public:
 							break;
 						}
 					}
+					if (candy[y][x] == game_mode_B)
+					{
+						cleared=cleared + 3;
+					}
 					candy[y][x] = 0;
 					candy[y][x + 1] = 0;
 					candy[y][x + 2] = 0;
-					match = 1;
 				}
 			}
 		}
@@ -154,6 +166,10 @@ public:
 					{
 						if (candy[y][x] == candy[y + z][x])
 						{
+							if (candy[y][x] == game_mode_B)
+							{
+								cleared++;
+							}
 							candy[y + z][x] = 0;
 						}
 						else
@@ -161,13 +177,17 @@ public:
 							break;
 						}
 					}
+					if (candy[y][x] == game_mode_B)
+					{
+						cleared = cleared + 3;
+					}
 					candy[y][x] = 0;
 					candy[y + 1][x] = 0;
 					candy[y + 2][x] = 0;
-					match = 1;
 				}
 			}
 		}
+		return cleared;
 	}
 	void gravity()
 	{
@@ -225,8 +245,11 @@ int main()
 	int match = 1;
 	int score = 0;
 	int exchange[2];
+	int turns = 15;
+	int candy_count = 6;
 	string exchangedir;
 	srand(time(0));
+	int game_mode_B = 1 + rand() % 6;;
 	while (match != 0)
 	{
 		game.initialize();
@@ -234,23 +257,38 @@ int main()
 	}
 	game.print_field();
 	int temp = 1;
-	for (;;)
+	for (;turns > 0;)
 	{
 		//x axis first, then y axis
 		cin >> exchange[0];
 		cin >> exchange[1];
 		cin >> exchangedir;
 		match = game.exchange(exchange, exchangedir);
+		if (match == 1)
+		{
+			turns--;
+		}
 		while (match == 1)
 		{
-			game.destory();
+			candy_count = candy_count - game.destory(game_mode_B);
 			score = game.score(score);
 			game.gravity();
 			game.fill();
 			match = game.check();
 		}
 		game.print_field();
+		if (candy_count <= 0)
+		{
+			cout << "Game Over, You Won!" << endl;
+			break;
+		}
 		cout << "Your current score is " << score << endl;
+		cout << turns << " turns left" << endl;
+		cout << "You still need to clear " << candy_count << " of " << game_mode_B << endl;
+	}
+	if (candy_count > 0)
+	{
+		cout << "Game Over, You Lose." << endl;
 	}
 	return 0;
 }
