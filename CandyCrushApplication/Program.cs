@@ -6,14 +6,15 @@ using System.Windows.Forms;
 
 namespace CandyCrushApplication {
 	static class Program {
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
+		public static Form mainMenuForm, gameForm;
+
 		[STAThread]
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new CandyCrushWindow());
+			mainMenuForm = new CandyCrushWindow();
+			gameForm = new GameForm();
+			Application.Run(mainMenuForm);
 		}
 	}
 }

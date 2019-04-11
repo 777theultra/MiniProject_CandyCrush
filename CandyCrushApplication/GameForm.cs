@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace CandyCrushApplication {
-	public partial class CandyCrushWindow : Form {
+	public partial class GameForm : Form {
 		[DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
 		private static extern IntPtr CreateRoundRectRgn(int left, int top, int right, int bottom, int width, int height);
 
@@ -19,10 +19,9 @@ namespace CandyCrushApplication {
 		[DllImportAttribute("user32.dll")]
 		public static extern bool ReleaseCapture();
 
-		public CandyCrushWindow() {
+		public GameForm() {
 			InitializeComponent();
-			this.TransparencyKey = this.BackColor;
-			//Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, this.panel1.Width, this.panel1.Height, 16, 16));
+			Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 16, 16));
 		}
 
 		private void EventWindowDrag(object sender, MouseEventArgs e) {
@@ -32,15 +31,16 @@ namespace CandyCrushApplication {
 			}
 		}
 
-		private void PictureBox2_Click(object sender, EventArgs e) {
-			Application.Exit();
+		private void CloseButton_Click(object sender, EventArgs e) {
+			this.Close();
+			Program.mainMenuForm.Show();
 		}
 
-		private void PictureBox2_MouseEnter(object sender, EventArgs e) {
+		private void CloseButton_MouseEnter(object sender, EventArgs e) {
 			this.CloseButton.BackColor = Color.Red;
 		}
 
-		private void PictureBox2_MouseLeave(object sender, EventArgs e) {
+		private void CloseButton_MouseLeave(object sender, EventArgs e) {
 			this.CloseButton.BackColor = Color.Transparent;
 		}
 	}
