@@ -31,10 +31,10 @@ namespace CandyCrushApplication {
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			mainMenuForm = new CandyCrushWindow();
-			gameForm = new GameForm();
-			Application.Run(mainMenuForm);
+            CandyCrushInitialize();
+            gameForm = new GameForm();
+            Application.Run(mainMenuForm);
 
-			CandyCrushInitialize();
 		}
 	}
 }
