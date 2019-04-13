@@ -71,7 +71,7 @@ namespace CandyCrushApplication {
 			for (int y = 0; y < 6; y++) {
 				for (int x = 0; x < 6; x++) {
 					PictureBox pictureBox = new PictureBox {
-						Name = "pictureBox("+x+","+y+")",
+						Name = "pictureBox(" + x + "," + y + ")",
 						Size = new Size(candyDisplaySize, candyDisplaySize),
 						Location = new Point(Width/2 - (candyDisplaySize * 6 / 2) + x * candyDisplaySize, Height/2 - (candyDisplaySize * 6 / 2)+10 + y * candyDisplaySize),
 						Image = Properties.Resources.Candy_Red,
@@ -113,6 +113,12 @@ namespace CandyCrushApplication {
 
 		private void CloseButton_MouseLeave(object sender, EventArgs e) {
 			this.CloseButton.BackColor = Color.Transparent;
+		}
+
+		private void GameForm_VisibleChanged(object sender, EventArgs e) {
+			if (this.Visible) {
+				RenderCandyCrush();
+			}
 		}
 	}
 }
