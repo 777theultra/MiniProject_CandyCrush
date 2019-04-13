@@ -121,6 +121,19 @@ public:
 		}
 		return match;
 	}
+	int checkstripe(int j,int k)
+	{
+		for (int y = 0; y <= 5; y++)
+		{
+			for (int x = 0; x <= 2; x++)
+			{
+				if (candy[y][x] == candy[y][x + 1] && candy[y][x] == candy[y][x + 2] && candy[y][x] == candy[y][x + 3])
+				{
+
+				}
+			}
+		}
+	}
 	int destory(int game_mode_B)
 	{
 		int match = 0;
