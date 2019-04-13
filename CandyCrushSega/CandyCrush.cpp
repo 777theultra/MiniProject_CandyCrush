@@ -51,7 +51,7 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 
 	switch (dir) {
 	case Up:
-		if (y - 1 > 0) {
+		if (y - 1 >= 0) {
 			target = &Board[y - 1][x];
 			std::cout << " Target (" << x << "," << y - 1 << ") (" << target->GetColor() << ")" << std::endl;
 		} else {
@@ -67,7 +67,7 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 		}
 		break;
 	case Left:
-		if (x - 1 > 0) {
+		if (x - 1 >= 0) {
 			target = &Board[y][x - 1];
 			std::cout << " Target (" << x - 1 << "," << y << ") (" << target->GetColor() << ")" << std::endl;
 		} else {

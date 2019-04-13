@@ -18,8 +18,26 @@ void Restart() {
 	game.RenderBoard();
 }
 
-void DebugBoard() {
-	game.RenderBoard();
+void CandyMove(int x, int y, int dir) {
+	Direction direction;
+	switch (dir) {
+	case 1:
+		direction = Up;
+		break;
+	case 2:
+		direction = Down;
+		break;
+	case 3:
+		direction = Left;
+		break;
+	case 4:
+		direction = Right;
+		break;
+	default:
+		std::cout << "Invalid dir value" << std::endl;
+		break;
+	}
+	game.CandyMove(x, y, direction);
 }
 
 int GetCandyColor(int x, int y) {
@@ -28,4 +46,8 @@ int GetCandyColor(int x, int y) {
 
 int GetCandySpecial(int x, int y) {
 	return game.GetCandySpecial(x, y);
+}
+
+void DebugBoard() {
+	game.RenderBoard();
 }

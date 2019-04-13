@@ -22,8 +22,12 @@ namespace CandyCrushApplication {
 		public static extern int CandyCrushGetCandyColor(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandySpecial", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandySpecial(int x, int y);
+		[DllImport("CandyCrushSega.dll", EntryPoint = "CandyMove", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void CandyCrushCandyMove(int x, int y, int dir);
 
 		private static PictureBox[,] candyGrid = new PictureBox[6,6];
+		private static bool IsSelected = false;
+		private static Point selectionPoint;
 
 		public void RenderCandyCrush() {
 			Program.CandyCrushDebugBoard();
@@ -34,6 +38,7 @@ namespace CandyCrushApplication {
 				for (int x = 0; x < 6; x++) {
 					int CandyColor = CandyCrushGetCandyColor(x, y);
 
+					candyGrid[x, y].BackColor = Color.Transparent;
 					switch (CandyColor) {
 						case 0:
 							candyGrid[x, y].Image = Properties.Resources.Candy_Red;
@@ -70,12 +75,14 @@ namespace CandyCrushApplication {
 					PictureBox pictureBox = new PictureBox {
 						Name = "pictureBox(" + x + "," + y + ")",
 						Size = new Size(candyDisplaySize, candyDisplaySize),
-						Location = new Point(Width/2 - (candyDisplaySize * 6 / 2) + x * candyDisplaySize, Height/2 - (candyDisplaySize * 6 / 2)+10 + y * candyDisplaySize),
+						Location = new Point(Width / 2 - (candyDisplaySize * 6 / 2) + x * candyDisplaySize, Height / 2 - (candyDisplaySize * 6 / 2) + 10 + y * candyDisplaySize),
 						Image = Properties.Resources.Candy_Red,
 						BackColor = System.Drawing.Color.Transparent,
 						SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage,
+						Cursor = Cursors.Hand,
 					};
 					pictureBox.MouseDoubleClick += OnCandyDoubleClick;
+					pictureBox.MouseClick += OnCandyClicked;
 					this.Controls.Add(pictureBox);
 					candyGrid[x, y] = pictureBox;
 				}
@@ -84,9 +91,56 @@ namespace CandyCrushApplication {
 			RenderCandyCrush();
 		}
 
+		private Point GetCandyPoint(Control control) {
+			for (int y = 0; y < 6; y++) {
+				for (int x = 0; x < 6; x++) {
+					if (candyGrid[x, y] == control) {
+						return new Point(x, y);
+					}
+				}
+			}
+			return new Point(-1, -1);
+		}
+
+		private void OnCandyClicked(object sender, MouseEventArgs e) {
+			Control control = (Control)sender;
+			if (IsSelected) {
+				Point p = GetCandyPoint(control);
+				if (p.X >= 0) {
+					if (p.X == selectionPoint.X && p.Y == selectionPoint.Y) {
+						control.BackColor = Color.Transparent;
+						IsSelected = false;
+					} else {
+						int dir = (selectionPoint.Y - p.Y == 1) ? 1 : (p.Y - selectionPoint.Y == 1) ? 2 : (selectionPoint.X - p.X == 1) ? 3 : (p.X - selectionPoint.X == 1) ? 4 : -1;
+						if (dir != -1) {
+							CandyCrushCandyMove(selectionPoint.X, selectionPoint.Y, dir);
+							RenderCandyCrush();
+							IsSelected = false;
+						} else {
+							Console.WriteLine("Invalid movement point: " + control.Name);
+						}
+					}
+				} else {
+					Console.WriteLine("Invalid selection point: " + control.Name);
+				}
+			} else {
+				control.BackColor = Color.LightYellow;
+				Point p = GetCandyPoint(control);
+				if (p.X >= 0) {
+					selectionPoint.X = p.X;
+					selectionPoint.Y = p.Y;
+					IsSelected = true;
+				} else {
+					Console.WriteLine("Invalid selection point: " + control.Name);
+				}
+			}
+		}
+
 		private void OnCandyDoubleClick(object sender, MouseEventArgs e) {
 			Control control = (Control) sender;
-			MessageBox.Show(control.Name.ToString());
+			if (Program.Player.Name == "Player1") {
+				MessageBox.Show(control.Name.ToString(), "Debug");
+			}
 		}
 
 		private void EventWindowDrag(object sender, MouseEventArgs e) {
