@@ -26,10 +26,7 @@ namespace CandyCrushApplication {
 		private static PictureBox[,] candyGrid = new PictureBox[6,6];
 
 		public void RenderCandyCrush() {
-			Console.WriteLine("PlayerName:" + Program.Player.Name);
-			Console.WriteLine("PlayerPoints:" + Program.Player.Points);
-			Console.WriteLine("PlayerSaveFile:" + Program.Player.SaveFile);
-
+			Program.CandyCrushDebugBoard();
 			this.NameLabel.Text = "Player: " + Program.Player.Name;
 			this.PointsLabel.Text = "Points: " + Program.Player.Points;
 
@@ -119,6 +116,10 @@ namespace CandyCrushApplication {
 			if (this.Visible) {
 				RenderCandyCrush();
 			}
+		}
+
+		private void PointsLabel_DoubleClick(object sender, EventArgs e) {
+			RenderCandyCrush();
 		}
 	}
 }

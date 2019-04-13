@@ -49,6 +49,8 @@ namespace CandyCrushApplication {
 				MessageBox.Show("Please input a valid name.", "Oops!");
 
 			} else {
+				Program.CandyCrushRestart();
+
 				string playerName = this.NameInput.Text;
 				string saveDataPath = Program.UserDataFolder.Name + "/" + playerName + ".txt";
 
@@ -67,10 +69,8 @@ namespace CandyCrushApplication {
 						writer.WriteLine(Program.Player.SaveFile);
 					}
 				}
-
 				this.Hide();
 				Program.gameForm.Show();
-				Program.CandyCrushRestart();
 			}
 			this.NameInput.Text = "";
 		}

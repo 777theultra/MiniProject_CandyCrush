@@ -22,6 +22,8 @@ namespace CandyCrushApplication {
 		public static extern void CandyCrushInitialize();
 		[DllImport("CandyCrushSega.dll", EntryPoint = "Restart", CallingConvention = CallingConvention.StdCall)]
 		public static extern void CandyCrushRestart();
+		[DllImport("CandyCrushSega.dll", EntryPoint = "DebugBoard", CallingConvention = CallingConvention.StdCall)]
+		public static extern void CandyCrushDebugBoard();
 
 		[STAThread]
 		static void Main() {

@@ -55,6 +55,7 @@
 			this.PointsLabel.Size = new System.Drawing.Size(93, 25);
 			this.PointsLabel.TabIndex = 4;
 			this.PointsLabel.Text = "Points: 0";
+			this.PointsLabel.DoubleClick += new System.EventHandler(this.PointsLabel_DoubleClick);
 			this.PointsLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EventWindowDrag);
 			// 
 			// NameLabel
