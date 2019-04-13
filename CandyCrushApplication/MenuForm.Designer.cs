@@ -70,7 +70,6 @@ namespace CandyCrushApplication {
 			this.NameInput.Name = "NameInput";
 			this.NameInput.Size = new System.Drawing.Size(208, 20);
 			this.NameInput.TabIndex = 6;
-			this.NameInput.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EventWindowDrag);
 			// 
 			// PlayerName
 			// 

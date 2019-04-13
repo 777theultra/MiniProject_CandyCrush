@@ -48,10 +48,27 @@ namespace CandyCrushApplication {
 			if (this.NameInput.Text.Length <= 0) {
 				MessageBox.Show("Please input a valid name.", "Oops!");
 			} else {
-				//FileStream F = new FileStream("test.dat", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+				string saveDataPath = Program.UserDataFolder.Name + "/" + this.NameInput.Text + ".txt";
+				Program.Player.SaveFile = saveDataPath;
+				if (File.Exists(saveDataPath)) {
+					using (StreamReader reader = new StreamReader(saveDataPath)) {
+						Program.Player.Name = reader.ReadLine();
+						Program.Player.Points = Convert.ToInt32(reader.ReadLine());
+					}
+				} else {
+					Program.Player.Name = this.NameInput.Text;
+					Program.Player.Points = 0;
+					using (StreamWriter writer = new StreamWriter(saveDataPath)) {
+						writer.WriteLine(Program.Player.Name);
+						writer.WriteLine(Program.Player.Points);
+						writer.WriteLine(Program.Player.SaveFile);
+					}
+				}
+				Program.CandyCrushRestart();
 				this.Hide();
 				Program.gameForm.Show();
 			}
+			this.NameInput.Text = "";
 		}
 	}
 }
