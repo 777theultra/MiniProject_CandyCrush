@@ -12,17 +12,18 @@ namespace CandyCrushApplication {
 		public int Points;
 		public string SaveFile;
 	}
-
+	
 	static class Program {
+		public static PlayerData Player;
 		public static DirectoryInfo UserDataFolder = Directory.CreateDirectory("UserData");
 		public static Form mainMenuForm, gameForm;
-
-		public static PlayerData Player;
 
 		[DllImport("CandyCrushSega.dll", EntryPoint = "Initialize", CallingConvention = CallingConvention.StdCall)]
 		public static extern void CandyCrushInitialize();
 		[DllImport("CandyCrushSega.dll", EntryPoint = "Restart", CallingConvention = CallingConvention.StdCall)]
 		public static extern void CandyCrushRestart();
+		[DllImport("CandyCrushSega.dll", EntryPoint = "DebugBoard", CallingConvention = CallingConvention.StdCall)]
+		public static extern void CandyCrushDebugBoard();
 
 		[STAThread]
 		static void Main() {

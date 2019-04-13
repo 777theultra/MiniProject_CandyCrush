@@ -18,6 +18,10 @@ void Restart() {
 	game.RenderBoard();
 }
 
+void DebugBoard() {
+	game.RenderBoard();
+}
+
 int GetCandyColor(int x, int y) {
 	return game.GetCandyColor(x, y);
 }

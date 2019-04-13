@@ -47,8 +47,13 @@ namespace CandyCrushApplication {
 		private void PlayButton_Click(object sender, EventArgs e) {
 			if (this.NameInput.Text.Length <= 0) {
 				MessageBox.Show("Please input a valid name.", "Oops!");
+
 			} else {
-				string saveDataPath = Program.UserDataFolder.Name + "/" + this.NameInput.Text + ".txt";
+				Program.CandyCrushRestart();
+
+				string playerName = this.NameInput.Text;
+				string saveDataPath = Program.UserDataFolder.Name + "/" + playerName + ".txt";
+
 				Program.Player.SaveFile = saveDataPath;
 				if (File.Exists(saveDataPath)) {
 					using (StreamReader reader = new StreamReader(saveDataPath)) {
@@ -56,7 +61,7 @@ namespace CandyCrushApplication {
 						Program.Player.Points = Convert.ToInt32(reader.ReadLine());
 					}
 				} else {
-					Program.Player.Name = this.NameInput.Text;
+					Program.Player.Name = playerName;
 					Program.Player.Points = 0;
 					using (StreamWriter writer = new StreamWriter(saveDataPath)) {
 						writer.WriteLine(Program.Player.Name);
@@ -64,7 +69,6 @@ namespace CandyCrushApplication {
 						writer.WriteLine(Program.Player.SaveFile);
 					}
 				}
-				Program.CandyCrushRestart();
 				this.Hide();
 				Program.gameForm.Show();
 			}
