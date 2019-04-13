@@ -1,18 +1,21 @@
 #pragma once
 #include "Candy.h"
 
+enum Direction : unsigned short { Up, Down, Left, Right };
+
 class CandyCrush {
 public:
 	CandyCrush();
-	CandyCrush(int, int);
 	~CandyCrush();
 	void RenderBoard();
-	void Initialize();
-	bool IsInitialized();
+	void CandySwap(Candy*, Candy*);
+	void CandyMove(int, int, Direction);
+	int GetCandyColor(int, int);
+	int GetCandySpecial(int, int);
 private:
-	bool Initialized = false;
-	Candy** Board;
-	short SizeX = 1;
-	short SizeY = 1;
+	Candy** Board = nullptr;
+	int** RawValues = nullptr;
+	short SizeX = 6;
+	short SizeY = 6;
 };
 
