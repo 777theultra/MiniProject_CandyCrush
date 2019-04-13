@@ -30,8 +30,9 @@ namespace CandyCrushApplication {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
+			CandyCrushInitialize();
+
 			mainMenuForm = new CandyCrushWindow();
-            CandyCrushInitialize();
             gameForm = new GameForm();
             Application.Run(mainMenuForm);
 
