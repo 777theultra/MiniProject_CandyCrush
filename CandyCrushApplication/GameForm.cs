@@ -174,7 +174,7 @@ namespace CandyCrushApplication {
 		}
 
 		private void CloseButton_Click(object sender, EventArgs e) {
-			DialogResult dialogResult = MessageBox.Show("Are you sure you want to exit to main menu?", "Leaving so soon?", MessageBoxButtons.YesNo);
+			DialogResult dialogResult = MessageBox.Show("Are you sure you want to exit to main menu? Your points will be saved.", "Leaving so soon?", MessageBoxButtons.YesNo);
 			if (dialogResult == DialogResult.Yes) {
 				using (StreamWriter writer = new StreamWriter(Program.Player.SaveFile)) {
 					writer.WriteLine(Program.Player.Name);
