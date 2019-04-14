@@ -20,11 +20,27 @@ void Restart() {
 }
 
 void ConnectRenderer(void (*f)()) {
-	RenderApplication = f;
+	ApplicationRender = f;
 }
 
 void ConnectAwardPoints(void (*f)(int)) {
-	AwardPoints = f;
+	ApplicationAwardPoints = f;
+}
+
+void AppRender() {
+	if (ApplicationRender != NULL) {
+		ApplicationRender();
+	} else {
+		std::cout << "Failed to render." << std::endl;
+	}
+}
+
+void AppAwardPoints(int points) {
+	if (ApplicationAwardPoints != NULL) {
+		ApplicationAwardPoints(points);
+	} else {
+		std::cout << "Failed to award points." << std::endl;
+	}
 }
 
 void CandyMove(int x, int y, int dir) {
@@ -48,7 +64,7 @@ void CandyMove(int x, int y, int dir) {
 		break;
 	}
 	std::cout << "End Move ============ (" << MoveCounter << ") ============" << std::endl;
-	RenderApplication();
+	AppRender();
 }
 
 int GetCandyColor(int x, int y) {
