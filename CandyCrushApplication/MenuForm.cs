@@ -23,6 +23,7 @@ namespace CandyCrushApplication {
 		public CandyCrushWindow() {
 			InitializeComponent();
 			Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 16, 16));
+			this.Focus();
 		}
 
 		private void EventWindowDrag(object sender, MouseEventArgs e) {

@@ -12,8 +12,6 @@ public:
 	~Candy();
 	int GetColor();
 	int GetSpecial();
-	Candy* GetNext(Direction);
-	void SetNext(Candy*, Direction);
 private:
 	Candy* NextUp = nullptr;
 	Candy* NextDown = nullptr;
