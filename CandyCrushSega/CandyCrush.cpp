@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstdlib>
-#include "Game.h"
 #include "CandyCrush.h"
 
 void CandyContainer::SetCandy(Candy candy) {
@@ -12,6 +11,7 @@ Candy* CandyContainer::GetCandy() {
 }
 
 void CandyContainer::Update() {
+	game.RenderBoard();
 	if (IsEmpty) {
 		if (NextUp != nullptr && !NextUp->IsEmpty) {
 			game.CandySwap(this, NextUp);
@@ -177,10 +177,14 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 			if (hContainers[x] != NULL) {
 				hContainers[x]->SetEmpty(true);
 				hContainers[x]->Update();
-				
 			}
 		}
-		AppAwardPoints(1 * (h - 2));
+		if (AwardPoints != NULL) {
+			AwardPoints(1 * (h - 2));
+			std::cout << "Successfully to awarded points." << std::endl;
+		} else {
+			std::cout << "Failed to award points." << std::endl;
+		}
 	}
 	if (v > 2) {
 		std::cout << "Vertical chain found: " << h << std::endl;
@@ -190,7 +194,12 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 				vContainers[y]->Update();
 			}
 		}
-		AppAwardPoints(1 * (v - 2));
+		if (AwardPoints != NULL) {
+			AwardPoints(1 * (v - 2));
+			std::cout << "Successfully to awarded points." << std::endl;
+		} else {
+			std::cout << "Failed to award points." << std::endl;
+		}
 	}
 }
 
@@ -222,13 +231,13 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 	CandyContainer* selection = &Board[y][x];
 	CandyContainer* target = nullptr;
 
-	std::cout << "Moving Candy from (" << x << "," << y << ") [" << selection->GetCandy()->GetColor() << "]";
+	std::cout << "Moving Selection's Candy (" << selection->GetCandy()->GetColor() << ")";
 
 	switch (dir) {
 	case Up:
 		if (y - 1 >= 0) {
 			target = &Board[y - 1][x];
-			std::cout << " to (" << x << "," << y - 1 << ") [" << target->GetCandy()->GetColor() << "]" << std::endl;
+			std::cout << " Target (" << x << "," << y - 1 << ") (" << target->GetCandy()->GetColor() << ")" << std::endl;
 		} else {
 			std::cout << " Candy can not be moved up." << std::endl;
 		}
@@ -236,7 +245,7 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 	case Down:
 		if (y + 1 < SizeY) {
 			target = &Board[y + 1][x];
-			std::cout << " to (" << x << "," << y + 1 << ") [" << target->GetCandy()->GetColor() << "]" << std::endl;
+			std::cout << " Target (" << x << "," << y + 1 << ") (" << target->GetCandy()->GetColor() << ")" << std::endl;
 		} else {
 			std::cout << " Candy can not be moved down." << std::endl;
 		}
@@ -244,7 +253,7 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 	case Left:
 		if (x - 1 >= 0) {
 			target = &Board[y][x - 1];
-			std::cout << " to (" << x - 1 << "," << y << ") [" << target->GetCandy()->GetColor() << "]" << std::endl;
+			std::cout << " Target (" << x - 1 << "," << y << ") (" << target->GetCandy()->GetColor() << ")" << std::endl;
 		} else {
 			std::cout << " Candy can not be moved left." << std::endl;
 		}
@@ -252,7 +261,7 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 	case Right:
 		if (x + 1 < SizeX) {
 			target = &Board[y][x + 1];
-			std::cout << " to (" << x + 1 << "," << y << ") [" << target->GetCandy()->GetColor() << "]" << std::endl;
+			std::cout << " Target (" << x + 1 << "," << y << ") (" << target->GetCandy()->GetColor() << ")" << std::endl;
 		} else {
 			std::cout << " Candy can not be moved right." << std::endl;
 		}

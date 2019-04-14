@@ -19,9 +19,9 @@ namespace CandyCrushApplication {
 		[DllImportAttribute("user32.dll")]
 		public static extern bool ReleaseCapture();
 
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate void RenderCandyCrushPointer();
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate void AwardPointsPointer(int points);
 
 		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectRenderer", CallingConvention = CallingConvention.Cdecl)]
