@@ -6,8 +6,11 @@
 #define GameAPI __declspec(dllimport)
 #endif
 
-static void (*RenderApplication)();
-static void (*AwardPoints)(int points);
+void AppRender();
+void AppAwardPoints(int);
+
+static void (*ApplicationRender)();
+static void (*ApplicationAwardPoints)(int points);
 
 extern "C" {
 	//API
