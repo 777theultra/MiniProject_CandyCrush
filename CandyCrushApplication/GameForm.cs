@@ -18,19 +18,24 @@ namespace CandyCrushApplication {
 		[DllImportAttribute("user32.dll")]
 		public static extern bool ReleaseCapture();
 
+		public delegate void RenderCandyCrushPointer();
+
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandyColor", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandyColor(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandySpecial", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandySpecial(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "CandyMove", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushCandyMove(int x, int y, int dir);
+		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectRenderer", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void CandyCrushConnectRenderer(RenderCandyCrushPointer f);
 
+		private static RenderCandyCrushPointer renderCandyCrushPointer;
 		private static PictureBox[,] candyGrid = new PictureBox[6,6];
 		private static bool IsSelected = false;
 		private static Point selectionPoint;
 
 		public void RenderCandyCrush() {
-			Program.CandyCrushDebugBoard();
+			//Program.CandyCrushDebugBoard();
 			this.NameLabel.Text = "Player: " + Program.Player.Name;
 			this.PointsLabel.Text = "Points: " + Program.Player.Points;
 
@@ -63,10 +68,12 @@ namespace CandyCrushApplication {
 			}
 		}
 
-
 		public GameForm() {
 			InitializeComponent();
 			Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 16, 16));
+
+			renderCandyCrushPointer = new RenderCandyCrushPointer(RenderCandyCrush);
+			CandyCrushConnectRenderer(renderCandyCrushPointer);
 
 			const int candyDisplaySize = 85;
 

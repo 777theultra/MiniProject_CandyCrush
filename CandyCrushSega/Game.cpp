@@ -18,26 +18,29 @@ void Restart() {
 	game.RenderBoard();
 }
 
+void ConnectRenderer(void (*renderFunc)()) {
+	RenderBoard = renderFunc;
+}
+
 void CandyMove(int x, int y, int dir) {
-	Direction direction;
 	switch (dir) {
 	case 1:
-		direction = Up;
+		game.CandyMove(x, y, Up);
 		break;
 	case 2:
-		direction = Down;
+		game.CandyMove(x, y, Down);
 		break;
 	case 3:
-		direction = Left;
+		game.CandyMove(x, y, Left);
 		break;
 	case 4:
-		direction = Right;
+		game.CandyMove(x, y, Right);
 		break;
 	default:
 		std::cout << "Invalid dir value" << std::endl;
 		break;
 	}
-	game.CandyMove(x, y, direction);
+	RenderBoard();
 }
 
 int GetCandyColor(int x, int y) {
