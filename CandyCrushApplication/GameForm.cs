@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.IO;
 
 namespace CandyCrushApplication {
 	public partial class GameForm : Form {
@@ -20,9 +21,13 @@ namespace CandyCrushApplication {
 
 		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate void RenderCandyCrushPointer();
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+		public delegate void AwardPointsPointer(int points);
 
 		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectRenderer", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushConnectRenderer(RenderCandyCrushPointer f);
+		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectAwardPoints", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void CandyCrushConnectAwardPoints(AwardPointsPointer f);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandyColor", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandyColor(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandySpecial", CallingConvention = CallingConvention.Cdecl)]
@@ -31,6 +36,7 @@ namespace CandyCrushApplication {
 		public static extern void CandyCrushCandyMove(int x, int y, int dir);
 
 		private static RenderCandyCrushPointer renderCandyCrushPointer;
+		private static AwardPointsPointer gameAwardPoints;
 		private static PictureBox[,] candyGrid = new PictureBox[6,6];
 		private static bool IsSelected = false;
 		private static Point selectionPoint;
@@ -69,6 +75,9 @@ namespace CandyCrushApplication {
 			}
 		}
 
+		public void AwardPoints(int points) {
+			Program.Player.Points += points;
+		}
 
 		public GameForm() {
 			InitializeComponent();
@@ -76,6 +85,9 @@ namespace CandyCrushApplication {
 
 			renderCandyCrushPointer = new RenderCandyCrushPointer(RenderCandyCrush);
 			CandyCrushConnectRenderer(renderCandyCrushPointer);
+
+			gameAwardPoints = new AwardPointsPointer(AwardPoints);
+			CandyCrushConnectAwardPoints(gameAwardPoints);
 
 			const int candyDisplaySize = 85;
 
@@ -164,6 +176,11 @@ namespace CandyCrushApplication {
 		private void CloseButton_Click(object sender, EventArgs e) {
 			DialogResult dialogResult = MessageBox.Show("Are you sure you want to exit to main menu?", "Leaving so soon?", MessageBoxButtons.YesNo);
 			if (dialogResult == DialogResult.Yes) {
+				using (StreamWriter writer = new StreamWriter(Program.Player.SaveFile)) {
+					writer.WriteLine(Program.Player.Name);
+					writer.WriteLine(Program.Player.Points);
+					writer.WriteLine(Program.Player.SaveFile);
+				}
 				this.Hide();
 				Program.mainMenuForm.Show();
 			}

@@ -14,6 +14,7 @@
 		"quit" - exit app.
 		"move X Y [w, a, s, d]" - moves candy in a direction. e.g "move 1 2 w"
 		"next X Y [w, a, s, d]" - print next of candy in a direction. e.g. "next 1 2 w"
+		"refresh" - refreshes board.
 		"restart" - regenerate board.
 */
 
@@ -30,7 +31,7 @@ int main() {
 		game.RenderBoard();
 		std::cin >> cmd;
 		if (cmd == "quit") { break; }
-		if (cmd != "restart") {
+		if (cmd != "restart" || cmd != "refresh") {
 			std::cin >> inputX >> inputY;
 			if (!std::cin.fail()) {
 				if (cmd == "move") {
@@ -49,28 +50,28 @@ int main() {
 					CandyContainer* c = game.GetCandyContainer(inputX, inputY);
 					if (dir == "w") {
 						while (c != nullptr) {
-							std::cout << "[" << c->GetCandy().GetColor() << "]";
+							std::cout << "[" << c->GetCandy()->GetColor() << "]";
 							c = c->GetNext(Up);
 							if (c != nullptr){ std::cout << "->"; }
 						};
 						std::cout << std::endl;
 					} else if (dir == "a") {
 						while (c != nullptr) {
-							std::cout << "[" << c->GetCandy().GetColor() << "]";
+							std::cout << "[" << c->GetCandy()->GetColor() << "]";
 							c = c->GetNext(Left);
 							if (c != nullptr) { std::cout << "->"; }
 						};
 						std::cout << std::endl;
 					} else if (dir == "s") {
 						while (c != nullptr) {
-							std::cout << "[" << c->GetCandy().GetColor() << "]";
+							std::cout << "[" << c->GetCandy()->GetColor() << "]";
 							c = c->GetNext(Down);
 							if (c != nullptr) { std::cout << "->"; }
 						};
 						std::cout << std::endl;
 					} else if (dir == "d") {
 						while (c != nullptr) {
-							std::cout << "[" << c->GetCandy().GetColor() << "]";
+							std::cout << "[" << c->GetCandy()->GetColor() << "]";
 							c = c->GetNext(Right);
 							if (c != nullptr) { std::cout << "->"; }
 						};
@@ -82,8 +83,12 @@ int main() {
 				std::cin.ignore();
 			}
 		} else {
-			std::cout << "Restarting game.." << std::endl;
-			game = CandyCrush();
+			if (cmd == "refresh") {
+				game.RenderBoard();
+			} else {
+				std::cout << "Restarting game.." << std::endl;
+				game = CandyCrush();
+			}
 		}
 	} while (true);
 

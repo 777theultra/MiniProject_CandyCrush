@@ -61,6 +61,7 @@ namespace CandyCrushApplication {
 						Program.Player.Name = reader.ReadLine();
 						Program.Player.Points = Convert.ToInt32(reader.ReadLine());
 					}
+					MessageBox.Show("Welcome, " + Program.Player.Name + ". You best score is " + Program.Player.Points + " points.", "Welcome back!");
 				} else {
 					Program.Player.Name = playerName;
 					Program.Player.Points = 0;

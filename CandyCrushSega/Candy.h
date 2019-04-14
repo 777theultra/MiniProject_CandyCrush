@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-enum CandyColor : unsigned short {Red, Orange, Yellow, Green, Blue, Purple };
+enum CandyColor : short { Empty = -1, Red, Orange, Yellow, Green, Blue, Purple };
 enum CandySpecial : unsigned short {None, Striped, Wrapped };
 enum Direction : unsigned short { Up, Down, Left, Right };
 
@@ -13,10 +13,6 @@ public:
 	int GetColor();
 	int GetSpecial();
 private:
-	Candy* NextUp = nullptr;
-	Candy* NextDown = nullptr;
-	Candy* NextLeft = nullptr;
-	Candy* NextRight = nullptr;
 	CandyColor Color = Red;
 	CandySpecial Special = None;
 };
