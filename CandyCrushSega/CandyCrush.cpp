@@ -11,7 +11,7 @@ Candy* CandyContainer::GetCandy() {
 }
 
 void CandyContainer::Update() {
-	std::cout << "Update start::" << std::endl;
+	game.RenderBoard();
 	if (IsEmpty) {
 		if (NextUp != nullptr && !NextUp->IsEmpty) {
 			game.CandySwap(this, NextUp);
@@ -24,7 +24,6 @@ void CandyContainer::Update() {
 			game.CandySwap(this, NextDown);
 		}
 	}
-	std::cout << "Update end::" << std::endl;
 }
 
 CandyContainer* CandyContainer::GetNext(Direction dir) {
@@ -119,10 +118,10 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	CandyContainer* hContainers[6] = {};
 	int h = 0, v = 0;
 
-	std::cout << "[Up]:  ";
+	//std::cout << "[Up]:  ";
 	do {
 		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
-			std::cout << " [" << c->GetCandy()->GetColor() << "]";
+			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			vContainers[v] = c;
 			v++;
 		} else {
@@ -132,10 +131,10 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	} while (c != nullptr);
 
 	c = subject->GetNext(Down);
-	std::cout << " [Down]: ";
+	//std::cout << " [Down]: ";
 	while (c != nullptr) {
 		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
-			std::cout << " [" << c->GetCandy()->GetColor() << "]";
+			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			vContainers[v] = c;
 			v++;
 		} else {
@@ -143,13 +142,13 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 		}
 		c = c->GetNext(Down);
 	};
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	c = subject;
-	std::cout << "[Left]:  ";
+	//std::cout << "[Left]:  ";
 	do {
 		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
-			std::cout << " [" << c->GetCandy()->GetColor() << "]";
+			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			hContainers[h] = c;
 			h++;
 		} else {
@@ -159,10 +158,10 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	} while (c != nullptr);
 
 	c = subject->GetNext(Right);
-	std::cout << " [Right]: ";
+	//std::cout << " [Right]: ";
 	while (c != nullptr) {
 		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
-			std::cout << " [" << c->GetCandy()->GetColor() << "]";
+			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			hContainers[h] = c;
 			h++;
 		} else {
@@ -170,7 +169,7 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 		}
 		c = c->GetNext(Right);
 	};
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	if (h > 2) {
 		std::cout << "Horizontal chain found: " << h << std::endl;
@@ -180,7 +179,6 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 				hContainers[x]->Update();
 			}
 		}
-		std::cout << "Attempt to award points." << std::endl;
 		if (AwardPoints != NULL) {
 			AwardPoints(1 * (h - 2));
 			std::cout << "Successfully to awarded points." << std::endl;
@@ -196,7 +194,6 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 				vContainers[y]->Update();
 			}
 		}
-		std::cout << "Attempt to award points." << std::endl;
 		if (AwardPoints != NULL) {
 			AwardPoints(1 * (v - 2));
 			std::cout << "Successfully to awarded points." << std::endl;
