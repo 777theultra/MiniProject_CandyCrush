@@ -1,8 +1,6 @@
 #pragma once
 #include "Candy.h"
 
-enum Direction : unsigned short { Up, Down, Left, Right };
-
 class CandyCrush {
 public:
 	CandyCrush();
@@ -10,6 +8,7 @@ public:
 	void RenderBoard();
 	void CandySwap(Candy*, Candy*);
 	void CandyMove(int, int, Direction);
+	Candy* GetCandy(int, int);
 	int GetCandyColor(int, int);
 	int GetCandySpecial(int, int);
 private:

@@ -1,0 +1,2 @@
+Command to debug dll functions. Do not delete.
+dumpbin.exe /exports "C:\Drive\Data\Visual Studio Projects\MiniProject_CandyCrush\Debug\CandyCrushSega.dll"

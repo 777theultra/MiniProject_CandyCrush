@@ -6,6 +6,8 @@
 #define GameAPI __declspec(dllimport)
 #endif
 
+static void (*RenderApplication)();
+
 extern "C" {
 	//API
 	GameAPI void Initialize();

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "CandyCrush.h"
+#include "Game.h"
 
 CandyCrush::CandyCrush() {
 	Board = new Candy * [SizeY];
@@ -8,6 +9,16 @@ CandyCrush::CandyCrush() {
 		Board[y] = new Candy[SizeX];
 		for (int x = 0; x < SizeX; x++) {
 			Board[y][x] = Candy();
+			if (x - 1 >= 0) {
+				Candy* c = &Board[y][x - 1];
+				Board[y][x].SetNext(c, Left);
+				c->SetNext(&Board[y][x], Right);
+			}
+			if (y - 1 >= 0) {
+				Candy* c = &Board[y - 1][x];
+				Board[y][x].SetNext(c, Up);
+				c->SetNext(&Board[y][x], Down);
+			}
 		}
 	}
 }
@@ -37,6 +48,7 @@ void CandyCrush::CandySwap(Candy* a, Candy* b) {
 	Candy temp = *a;
 	*a = *b;
 	*b = temp;
+	RenderApplication();
 }
 
 void CandyCrush::CandyMove(int x, int y, Direction dir) {
@@ -86,6 +98,10 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 	if (selection != nullptr && target != nullptr) {
 		CandySwap(selection, target);
 	}
+}
+
+Candy* CandyCrush::GetCandy(int x, int y) {
+	return &Board[y][x];
 }
 
 int CandyCrush::GetCandyColor(int x, int y) {

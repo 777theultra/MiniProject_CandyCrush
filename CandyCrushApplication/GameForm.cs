@@ -36,7 +36,7 @@ namespace CandyCrushApplication {
 		private static Point selectionPoint;
 
 		public void RenderCandyCrush() {
-			Program.CandyCrushDebugBoard();	
+			Program.CandyCrushDebugBoard();
 			NameLabel.Text = "Player: " + Program.Player.Name;
 			PointsLabel.Text = "Points: " + Program.Player.Points;
 
@@ -120,7 +120,10 @@ namespace CandyCrushApplication {
 						control.BackColor = Color.Transparent;
 						IsSelected = false;
 					} else {
-						int dir = (selectionPoint.Y - p.Y == 1) ? 1 : (p.Y - selectionPoint.Y == 1) ? 2 : (selectionPoint.X - p.X == 1) ? 3 : (p.X - selectionPoint.X == 1) ? 4 : -1;
+						int dir = (selectionPoint.Y - p.Y == 1 && selectionPoint.X == p.X) ? 1
+							: (p.Y - selectionPoint.Y == 1 && selectionPoint.X == p.X) ? 2
+							: (selectionPoint.X - p.X == 1 && selectionPoint.Y == p.Y) ? 3
+							: (p.X - selectionPoint.X == 1 && selectionPoint.Y == p.Y) ? 4 : -1;
 						if (dir != -1) {
 							CandyCrushCandyMove(selectionPoint.X, selectionPoint.Y, dir);
 							IsSelected = false;
@@ -145,10 +148,10 @@ namespace CandyCrushApplication {
 		}
 
 		private void OnCandyDoubleClick(object sender, MouseEventArgs e) {
-			Control control = (Control) sender;
+			/*Control control = (Control) sender;
 			if (Program.Player.Name == "Player1") {
 				MessageBox.Show(control.Name.ToString(), "Debug");
-			}
+			}*/
 		}
 
 		private void EventWindowDrag(object sender, MouseEventArgs e) {

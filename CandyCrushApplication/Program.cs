@@ -35,7 +35,6 @@ namespace CandyCrushApplication {
 			mainMenuForm = new CandyCrushWindow();
             gameForm = new GameForm();
             Application.Run(mainMenuForm);
-
 		}
 	}
 }

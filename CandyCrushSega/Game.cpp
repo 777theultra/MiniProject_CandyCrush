@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "CandyCrush.h"
 
-static void (*RenderBoard)();
 static CandyCrush game;
 
 void Initialize() {
@@ -20,7 +19,7 @@ void Restart() {
 }
 
 void ConnectRenderer(void (*renderFunc)()) {
-	RenderBoard = renderFunc;
+	RenderApplication = renderFunc;
 }
 
 void CandyMove(int x, int y, int dir) {
@@ -41,7 +40,6 @@ void CandyMove(int x, int y, int dir) {
 		std::cout << "Invalid dir value" << std::endl;
 		break;
 	}
-	RenderBoard();
 }
 
 int GetCandyColor(int x, int y) {
