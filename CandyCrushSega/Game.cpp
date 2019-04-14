@@ -6,12 +6,15 @@
 #include "Game.h"
 #include "CandyCrush.h"
 
+int MoveCounter = 0;
+
 void Initialize() {
 	std::srand(time(0));
 	Restart();
 }
 
 void Restart() {
+	MoveCounter = 0;
 	game = CandyCrush();
 	game.RenderBoard();
 }
@@ -25,6 +28,8 @@ void ConnectAwardPoints(void (*f)(int)) {
 }
 
 void CandyMove(int x, int y, int dir) {
+	MoveCounter++;
+	std::cout << "Move ============ (" << MoveCounter << ") ============" << std::endl;
 	switch (dir) {
 	case 1:
 		game.CandyMove(x, y, Up);
@@ -42,6 +47,7 @@ void CandyMove(int x, int y, int dir) {
 		std::cout << "Invalid dir value" << std::endl;
 		break;
 	}
+	std::cout << "End Move ============ (" << MoveCounter << ") ============" << std::endl;
 	RenderApplication();
 }
 
