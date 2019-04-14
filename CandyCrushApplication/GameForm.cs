@@ -18,16 +18,17 @@ namespace CandyCrushApplication {
 		[DllImportAttribute("user32.dll")]
 		public static extern bool ReleaseCapture();
 
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate void RenderCandyCrushPointer();
 
+		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectRenderer", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void CandyCrushConnectRenderer(RenderCandyCrushPointer f);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandyColor", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandyColor(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandySpecial", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandySpecial(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "CandyMove", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushCandyMove(int x, int y, int dir);
-		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectRenderer", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void CandyCrushConnectRenderer(RenderCandyCrushPointer f);
 
 		private static RenderCandyCrushPointer renderCandyCrushPointer;
 		private static PictureBox[,] candyGrid = new PictureBox[6,6];
@@ -35,9 +36,9 @@ namespace CandyCrushApplication {
 		private static Point selectionPoint;
 
 		public void RenderCandyCrush() {
-			//Program.CandyCrushDebugBoard();
-			this.NameLabel.Text = "Player: " + Program.Player.Name;
-			this.PointsLabel.Text = "Points: " + Program.Player.Points;
+			Program.CandyCrushDebugBoard();	
+			NameLabel.Text = "Player: " + Program.Player.Name;
+			PointsLabel.Text = "Points: " + Program.Player.Points;
 
 			for (int y = 0; y < 6; y++) {
 				for (int x = 0; x < 6; x++) {
@@ -67,6 +68,7 @@ namespace CandyCrushApplication {
 				}
 			}
 		}
+
 
 		public GameForm() {
 			InitializeComponent();
@@ -121,7 +123,6 @@ namespace CandyCrushApplication {
 						int dir = (selectionPoint.Y - p.Y == 1) ? 1 : (p.Y - selectionPoint.Y == 1) ? 2 : (selectionPoint.X - p.X == 1) ? 3 : (p.X - selectionPoint.X == 1) ? 4 : -1;
 						if (dir != -1) {
 							CandyCrushCandyMove(selectionPoint.X, selectionPoint.Y, dir);
-							RenderCandyCrush();
 							IsSelected = false;
 						} else {
 							Console.WriteLine("Invalid movement point: " + control.Name);

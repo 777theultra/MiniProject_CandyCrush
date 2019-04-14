@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "CandyCrush.h"
 
+static void (*RenderBoard)();
 static CandyCrush game;
 
 void Initialize() {

@@ -6,16 +6,15 @@
 #define GameAPI __declspec(dllimport)
 #endif
 
-//Connections
-static void (*RenderBoard)();
+extern "C" {
+	//API
+	GameAPI void Initialize();
+	GameAPI void Restart();
+	GameAPI void ConnectRenderer(void (*f)());
+	GameAPI void CandyMove(int, int, int);
+	GameAPI int GetCandyColor(int, int);
+	GameAPI int GetCandySpecial(int, int);
 
-//API
-extern "C" GameAPI void Initialize();
-extern "C" GameAPI void Restart();
-extern "C" GameAPI void ConnectRenderer(void*);
-extern "C" GameAPI void CandyMove(int, int, int);
-extern "C" GameAPI int GetCandyColor(int, int);
-extern "C" GameAPI int GetCandySpecial(int, int);
-
-//Debug
-extern "C" GameAPI void DebugBoard();
+	//Debug
+	GameAPI void DebugBoard();
+}
