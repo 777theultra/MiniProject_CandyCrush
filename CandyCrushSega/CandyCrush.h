@@ -13,7 +13,7 @@ public:
 
 	void SetEmpty(bool);
 	bool GetEmpty();
-	int X, Y;
+	int X, Y; 
 private:
 	bool IsEmpty = false;
 	Candy CandyObject = Candy();
