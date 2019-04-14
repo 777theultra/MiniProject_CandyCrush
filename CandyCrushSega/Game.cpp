@@ -16,7 +16,6 @@ void Initialize() {
 void Restart() {
 	MoveCounter = 0;
 	game = CandyCrush();
-	game.RenderBoard();
 }
 
 void ConnectRenderer(void (*f)()) {
@@ -25,6 +24,23 @@ void ConnectRenderer(void (*f)()) {
 
 void ConnectAwardPoints(void (*f)(int)) {
 	AwardPoints = f;
+}
+
+void AppRenderApplication(){
+	if (AppRenderApplication != NULL) {
+		RenderApplication();
+		game.RenderBoard();
+	} else {
+		std::cout << "Connection: Failed to render." << std::endl;
+	}
+}
+
+void AppAwardPoints(int points) {
+	if (AppRenderApplication != NULL) {
+		AwardPoints(points);
+	} else {
+		std::cout << "Connection: Failed to award points." << std::endl;
+	}
 }
 
 void CandyMove(int x, int y, int dir) {

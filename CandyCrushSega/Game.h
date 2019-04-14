@@ -8,6 +8,8 @@
 
 static void (*RenderApplication)();
 static void (*AwardPoints)(int points);
+void AppRenderApplication();
+void AppAwardPoints(int);
 
 extern "C" {
 	//API
