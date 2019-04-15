@@ -11,9 +11,11 @@ public:
 	CandyContainer* GetNext(Direction);
 	void SetNext(CandyContainer*, Direction);
 
+	void ApplyGravity();
+
 	void SetEmpty(bool);
 	bool GetEmpty();
-	int X, Y; 
+	int X = -1, Y = -1;
 private:
 	bool IsEmpty = false;
 	Candy CandyObject = Candy();

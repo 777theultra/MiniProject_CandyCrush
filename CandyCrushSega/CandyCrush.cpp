@@ -14,16 +14,13 @@ void CandyContainer::Update() {
 	if (NextDown != nullptr) {
 		if (NextDown->IsEmpty) {
 			game.CandySwap(this, NextDown);
+			if (IsEmpty && NextUp == nullptr) {
+				CandyObject = Candy();
+				IsEmpty = false;
+			}
+			NextDown->Update();
 		}
 	}
-	/*if (NextUp != nullptr) {
-		if (!NextUp->IsEmpty) {
-			game.CandySwap(this, NextUp);
-		} else {
-			CandyObject = Candy();
-			IsEmpty = false;
-		}
-	}*/
 }
 
 CandyContainer* CandyContainer::GetNext(Direction dir) {
@@ -54,6 +51,28 @@ void CandyContainer::SetNext(CandyContainer* container, Direction dir) {
 	case Right:
 		NextRight = container;
 		break;
+	}
+}
+
+void CandyContainer::ApplyGravity() {
+	if (IsEmpty) {
+		CandyContainer* nextNonEmpty = NextUp;
+		if (nextNonEmpty != nullptr) {
+			do {
+				if (nextNonEmpty->IsEmpty) {
+					if (nextNonEmpty->NextUp != nullptr) {
+						nextNonEmpty = nextNonEmpty->NextUp;
+					} else {
+						nextNonEmpty->SetCandy(Candy());
+						nextNonEmpty->SetEmpty(false);
+					}
+				}
+			} while (nextNonEmpty->IsEmpty);
+			game.CandySwap(this, nextNonEmpty);
+		} else {
+			CandyObject = Candy();
+			IsEmpty = false;
+		}
 	}
 }
 
@@ -201,13 +220,6 @@ void CandyCrush::CandySwap(CandyContainer* a, CandyContainer* b) {
 	a->SetEmpty(b->GetEmpty());
 	b->SetCandy(tempA);
 	b->SetEmpty(tempBool);
-	
-	if (!b->GetEmpty()) {
-		CandyScan(b);
-	}
-	if (!a->GetEmpty()) {
-		CandyScan(a);
-	}
 }
 
 void CandyCrush::CandyMove(int x, int y, Direction dir) {
@@ -256,23 +268,18 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 	}
 	if (selection != nullptr && target != nullptr) {
 		CandySwap(selection, target);
+
+		if (!selection->GetEmpty()) {
+			CandyScan(selection);
+		}
+		if (!target->GetEmpty()) {
+			CandyScan(target);
+		}
 		for (int x = 0; x < SizeX; x++) {
 			CandyContainer* column = &Board[5][x];
 			do {
-				if (column->GetEmpty()) {
-					if (column->GetNext(Up) != nullptr) {
-						CandySwap(column, column->GetNext(Up));
-						column = column->GetNext(Up);
-					} else {
-						if (column->GetEmpty()) {
-							column->SetCandy(Candy());
-							column->SetEmpty(false);
-						}
-						column = nullptr;
-					}
-				} else {
-					column = column->GetNext(Up);
-				}
+				column->ApplyGravity();
+				column = column->GetNext(Up);
 			} while (column != nullptr);
 		}
 	}
