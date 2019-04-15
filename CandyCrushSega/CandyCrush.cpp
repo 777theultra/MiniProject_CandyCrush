@@ -207,9 +207,13 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 			}
 		}
 		if (h == 4) {
-			std::cout << "Combo P found: " << h << std::endl;
+			std::cout << "Combo P found " << std::endl;
 			subject->SetEmpty(false);
 			subject->GetCandy()->SetSpecial(Striped);
+		} else if (h == 5) {
+			std::cout << "Combo S found " << std::endl;
+			subject->SetEmpty(false);
+			subject->GetCandy()->SetSpecial(Bomb);
 		}
 		AppAwardPoints(1 * (h - 2));
 	}
@@ -227,9 +231,13 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 			}
 		}
 		if (v == 4) {
-			std::cout << "Combo P found: " << v << std::endl;
+			std::cout << "Combo P found" << std::endl;
 			subject->SetEmpty(false);
 			subject->GetCandy()->SetSpecial(Striped);
+		} else if (v == 5) {
+			std::cout << "Combo S found " << std::endl;
+			subject->SetEmpty(false);
+			subject->GetCandy()->SetSpecial(Bomb);
 		}
 		AppAwardPoints(1 * (v - 2));
 	}
@@ -292,7 +300,19 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 		CandySwap(selection, target);
 
 		if (!selection->GetEmpty()) {
-			CandyScan(selection);
+			if (target->GetCandy()->GetSpecial() == Bomb) {
+				std::cout << "Combo S bombing all color " << selection->GetCandy()->GetColor() << std::endl;
+				target->SetEmpty(true);
+				for (int y = 0; y < SizeY; y++) {
+					for (int x = 0; x < SizeX; x++) {
+						if (Board[y][x].GetCandy()->GetColor() == selection->GetCandy()->GetColor()) {
+							Board[y][x].SetEmpty(true);
+						}
+					}
+				}
+			} else {
+				CandyScan(selection);
+			}
 		}
 		if (!target->GetEmpty()) {
 			CandyScan(target);
@@ -314,7 +334,8 @@ CandyContainer* CandyCrush::GetCandyContainer(int x, int y) {
 
 int CandyCrush::GetRawCandy(int x, int y) {
 	return Board[y][x].GetEmpty() ? -1 :
-		(Board[y][x].GetCandy()->GetSpecial() == 0) ? Board[y][x].GetCandy()->GetColor() :
+		(Board[y][x].GetCandy()->GetSpecial() == Bomb) ? 30 :
+		(Board[y][x].GetCandy()->GetSpecial() == None) ? Board[y][x].GetCandy()->GetColor() :
 		Board[y][x].GetCandy()->GetSpecial() + Board[y][x].GetCandy()->GetColor();
 }
 

@@ -89,6 +89,9 @@ namespace CandyCrushApplication {
 						case 15:
 							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialPurple;
 							break;
+						case 30:
+							candyGrid[x, y].Image = Properties.Resources.Candy_Choco;
+							break;
 						case -1:
 							candyGrid[x, y].Image = Properties.Resources.Candy_Dead;
 							break;
@@ -96,7 +99,7 @@ namespace CandyCrushApplication {
 					candyGrid[x, y].Refresh();
 				}
 			}
-			Thread.Sleep(200);
+			Thread.Sleep(250);
 		}
 
 		public void AwardPoints(int points) {

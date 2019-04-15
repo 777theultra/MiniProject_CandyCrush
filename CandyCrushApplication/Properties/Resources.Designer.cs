@@ -83,6 +83,16 @@ namespace CandyCrushApplication.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Candy_Choco {
+            get {
+                object obj = ResourceManager.GetObject("Candy_Choco", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Candy_Dead {
             get {
                 object obj = ResourceManager.GetObject("Candy_Dead", resourceCulture);
