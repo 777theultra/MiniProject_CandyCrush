@@ -19,3 +19,7 @@ int Candy::GetColor() {
 int Candy::GetSpecial() {
 	return static_cast<int>(Special);
 }
+
+void Candy::SetSpecial(CandySpecial special) {
+	Special = special;
+}

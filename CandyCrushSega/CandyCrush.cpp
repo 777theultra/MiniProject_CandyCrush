@@ -1,6 +1,10 @@
 #include <iostream>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 #include "CandyCrush.h"
+
+using namespace std::chrono_literals;
 
 void CandyContainer::SetCandy(Candy candy) {
 	CandyObject = candy;
@@ -123,8 +127,7 @@ void CandyCrush::RenderBoard() {
 			if (Board[y][x].GetEmpty()) {
 				std::cout << "X" << "\t";
 			} else {
-				Candy* candy = Board[y][x].GetCandy();
-				std::cout << candy->GetColor() << (candy->GetSpecial() == 0 ? "" : "*") << "\t";
+				std::cout << game.GetRawCandy(x, y) << "\t";
 			}
 		}
 		std::cout << std::endl;
@@ -195,8 +198,18 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 		for (int x = 0; x < h; x++) {
 			if (hContainers[x] != NULL) {
 				hContainers[x]->SetEmpty(true);
-				//hContainers[x]->Update();
+				if (hContainers[x]->GetCandy()->GetSpecial() == Striped) {
+					for (int a = 0; a < SizeX; a++) {
+						Board[hContainers[x]->Y][a].SetEmpty(true);
+					}
+					std::cout << "Combo P wiping row " << hContainers[x]->Y << std::endl;
+				}
 			}
+		}
+		if (h == 4) {
+			std::cout << "Combo P found: " << h << std::endl;
+			subject->SetEmpty(false);
+			subject->GetCandy()->SetSpecial(Striped);
 		}
 		AppAwardPoints(1 * (h - 2));
 	}
@@ -205,12 +218,21 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 		for (int y = 0; y < v; y++) {
 			if (vContainers[y] != NULL) {
 				vContainers[y]->SetEmpty(true);
-				//vContainers[y]->Update();
+				if (vContainers[y]->GetCandy()->GetSpecial() == Striped) {
+					for (int a = 0; a < SizeX; a++) {
+						Board[vContainers[y]->Y][a].SetEmpty(true);
+					}
+					std::cout << "Combo P wiping row " << vContainers[y]->Y << std::endl;
+				}
 			}
+		}
+		if (v == 4) {
+			std::cout << "Combo P found: " << v << std::endl;
+			subject->SetEmpty(false);
+			subject->GetCandy()->SetSpecial(Striped);
 		}
 		AppAwardPoints(1 * (v - 2));
 	}
-
 }
 
 void CandyCrush::CandySwap(CandyContainer* a, CandyContainer* b) {
@@ -275,6 +297,7 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 		if (!target->GetEmpty()) {
 			CandyScan(target);
 		}
+		AppRenderApplication();
 		for (int x = 0; x < SizeX; x++) {
 			CandyContainer* column = &Board[5][x];
 			do {
@@ -289,11 +312,9 @@ CandyContainer* CandyCrush::GetCandyContainer(int x, int y) {
 	return &Board[y][x];
 }
 
-int CandyCrush::GetCandyColor(int x, int y) {
-	return Board[y][x].GetCandy()->GetColor();
-}
-
-int CandyCrush::GetCandySpecial(int x, int y) {
-	return Board[y][x].GetCandy()->GetSpecial();
+int CandyCrush::GetRawCandy(int x, int y) {
+	return Board[y][x].GetEmpty() ? -1 :
+		(Board[y][x].GetCandy()->GetSpecial() == 0) ? Board[y][x].GetCandy()->GetColor() :
+		Board[y][x].GetCandy()->GetSpecial() + Board[y][x].GetCandy()->GetColor();
 }
 

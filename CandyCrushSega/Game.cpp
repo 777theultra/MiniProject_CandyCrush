@@ -67,12 +67,8 @@ void CandyMove(int x, int y, int dir) {
 	RenderApplication();
 }
 
-int GetCandyColor(int x, int y) {
-	return game.GetCandyColor(x, y);
-}
-
-int GetCandySpecial(int x, int y) {
-	return game.GetCandySpecial(x, y);
+int GetCandy(int x, int y) {
+	return game.GetRawCandy(x, y);
 }
 
 void DebugBoard() {

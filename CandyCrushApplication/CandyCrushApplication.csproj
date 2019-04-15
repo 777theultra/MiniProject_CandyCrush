@@ -143,5 +143,26 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_SpecialBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_SpecialGreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_SpecialOrange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_SpecialPurple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_SpecialRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_SpecialYellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_Dead.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
