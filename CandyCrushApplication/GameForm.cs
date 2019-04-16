@@ -57,9 +57,13 @@ namespace CandyCrushApplication {
 		private static Point selectionPoint;
 
 		private static int MovesRemaining = 25;
+		bool objectiveBComplete = false;
+		bool objectiveDComplete = false;
 
 		public void SetMoves(int moves) {
 			MovesRemaining = moves;
+			objectiveBComplete = false;
+			objectiveDComplete = false;
 		}
 
 		public void RenderCandyCrush() {
@@ -143,7 +147,7 @@ namespace CandyCrushApplication {
 					candyGrid[x, y].Refresh();
 				}
 			}
-			if (Program.Player.Level == 1) {
+			if (Program.Player.Level == 1 || Program.Player.Level == 3) {
 				int objectiveColor = CandyCrushGetObjectiveBColor();
 				string color = "None";
 				switch (objectiveColor) {
@@ -166,8 +170,11 @@ namespace CandyCrushApplication {
 						color = "Purple";
 						break;
 				}
-				ObjectiveLabel.Text = "Objective: Eliminate " + CandyCrushGetObjectiveBAmount() + " " + color + " candies with in " + MovesRemaining  + " moves.";
-			} else if (Program.Player.Level == 2) {
+				int amtLeft = CandyCrushGetObjectiveBAmount();
+				amtLeft = (amtLeft <= 0) ? 0 : amtLeft;
+				ObjectiveLabel.Text = "Objective: Eliminate " + amtLeft + " " + color + " candies within " + MovesRemaining  + " moves.";
+			}
+			if (Program.Player.Level == 2 || Program.Player.Level == 3) {
 				int objectiveCombo = CandyCrushGetObjectiveDCombo();
 				string combo = "None";
 				switch (objectiveCombo) {
@@ -181,7 +188,13 @@ namespace CandyCrushApplication {
 						combo = "Colour Bomb";
 						break;
 				}
-				ObjectiveLabel.Text = "Objective: Make " + CandyCrushGetObjectiveDAmount() + " " + combo + " with in " + MovesRemaining + " moves.";
+				int amtLeft = CandyCrushGetObjectiveDAmount();
+				amtLeft = (amtLeft <= 0) ? 0 : amtLeft;
+				if (Program.Player.Level == 2) {
+					ObjectiveLabel.Text = "Objective: Make " + amtLeft + " " + combo + " within " + MovesRemaining + " moves.";
+				} else {
+					ObjectiveLabel.Text += "\nAnd Make " + amtLeft + " " + combo + " within " + MovesRemaining + " moves.";
+				}
 			}
 			Thread.Sleep(200);
 		}
@@ -201,9 +214,22 @@ namespace CandyCrushApplication {
 		}
 
 		public void CompleteObjective(int id) {
-			if (Program.Player.Level == id) {
-				MessageBox.Show("You completed the objective. You won!", "Winner!");
-				ReturnToMenu();
+			if (id == 1) {
+				objectiveBComplete = true;
+			} 
+			if (id == 2) {
+				objectiveDComplete = true;
+			}
+			if (Program.Player.Level <= 2) {
+				if (Program.Player.Level == id) {
+					MessageBox.Show("You completed the objective. You won!", "Winner!");
+					ReturnToMenu();
+				}
+			} else {
+				if (objectiveBComplete && objectiveDComplete) {
+					MessageBox.Show("You completed the objective. You won!", "Winner!");
+					ReturnToMenu();
+				}
 			}
 		}
 
