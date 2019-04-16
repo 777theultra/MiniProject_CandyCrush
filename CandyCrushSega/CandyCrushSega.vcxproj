@@ -128,7 +128,6 @@
     <ClCompile Include="Candy.cpp" />
     <ClCompile Include="CandyCrush.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Candy.h" />

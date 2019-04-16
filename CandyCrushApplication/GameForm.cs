@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.IO;
+using Timer = System.Windows.Forms.Timer;
 
 namespace CandyCrushApplication {
 	public partial class GameForm : Form {
@@ -24,24 +25,45 @@ namespace CandyCrushApplication {
 		public delegate void RenderCandyCrushPointer();
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void AwardPointsPointer(int points);
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate void ObjectiveCompletePointer(int id);
 
 		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectRenderer", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushConnectRenderer(RenderCandyCrushPointer f);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectAwardPoints", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushConnectAwardPoints(AwardPointsPointer f);
+		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectObjectiveComplete", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void CandyCrushConnectObjectiveComplete(ObjectiveCompletePointer f);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandy", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int CandyCrushGetCandy(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "CandyMove", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushCandyMove(int x, int y, int dir);
 
+		//Objectives
+		[DllImport("CandyCrushSega.dll", EntryPoint = "GetObjectiveBColor", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int CandyCrushGetObjectiveBColor();
+		[DllImport("CandyCrushSega.dll", EntryPoint = "GetObjectiveBAmount", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int CandyCrushGetObjectiveBAmount();
+		[DllImport("CandyCrushSega.dll", EntryPoint = "GetObjectiveDCombo", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int CandyCrushGetObjectiveDCombo();
+		[DllImport("CandyCrushSega.dll", EntryPoint = "GetObjectiveDAmount", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int CandyCrushGetObjectiveDAmount();
+
 		private static RenderCandyCrushPointer renderCandyCrushPointer;
 		private static AwardPointsPointer gameAwardPoints;
-		private static PictureBox[,] candyGrid = new PictureBox[6,6];
+		private static ObjectiveCompletePointer objectiveCompletePointer;
+		private static PictureBox[,] candyGrid = new PictureBox[6, 6];
 		private static bool IsSelected = false;
 		private static Point selectionPoint;
 
+		private static int MovesRemaining = 25;
+
+		public void SetMoves(int moves) {
+			MovesRemaining = moves;
+		}
+
 		public void RenderCandyCrush() {
-			Program.CandyCrushDebugBoard();
+			//Program.CandyCrushDebugBoard();
 			NameLabel.Text = "Player: " + Program.Player.Name;
 			PointsLabel.Text = "Points: " + Program.Player.Points;
 
@@ -121,11 +143,68 @@ namespace CandyCrushApplication {
 					candyGrid[x, y].Refresh();
 				}
 			}
+			if (Program.Player.Level == 1) {
+				int objectiveColor = CandyCrushGetObjectiveBColor();
+				string color = "None";
+				switch (objectiveColor) {
+					case 0:
+						color = "Red";
+						break;
+					case 1:
+						color = "Orange";
+						break;
+					case 2:
+						color = "Yellow";
+						break;
+					case 3:
+						color = "Green";
+						break;
+					case 4:
+						color = "Blue";
+						break;
+					case 5:
+						color = "Purple";
+						break;
+				}
+				ObjectiveLabel.Text = "Objective: Eliminate " + CandyCrushGetObjectiveBAmount() + " " + color + " candies with in " + MovesRemaining  + " moves.";
+			} else if (Program.Player.Level == 2) {
+				int objectiveCombo = CandyCrushGetObjectiveDCombo();
+				string combo = "None";
+				switch (objectiveCombo) {
+					case 0:
+						combo = "Stripped Candies";
+						break;
+					case 1:
+						combo = "Wrapped Candies";
+						break;
+					case 2:
+						combo = "Colour Bomb";
+						break;
+				}
+				ObjectiveLabel.Text = "Objective: Make " + CandyCrushGetObjectiveDAmount() + " " + combo + " with in " + MovesRemaining + " moves.";
+			}
 			Thread.Sleep(200);
 		}
 
 		public void AwardPoints(int points) {
 			Program.Player.Points += points;
+		}
+
+		public void ShowLeaderboard() {
+			this.Hide();
+			Program.scoreForm.Show();
+		}
+
+		public void ReturnToMenu() {
+			this.Hide();
+			Program.mainMenuForm.Show();
+		}
+
+		public void CompleteObjective(int id) {
+			if (Program.Player.Level == id) {
+				MessageBox.Show("You completed the objective. You won!", "Winner!");
+				ReturnToMenu();
+			}
 		}
 
 		public GameForm() {
@@ -137,6 +216,9 @@ namespace CandyCrushApplication {
 
 			gameAwardPoints = new AwardPointsPointer(AwardPoints);
 			CandyCrushConnectAwardPoints(gameAwardPoints);
+
+			objectiveCompletePointer = new ObjectiveCompletePointer(CompleteObjective);
+			CandyCrushConnectObjectiveComplete(objectiveCompletePointer);
 
 			const int candyDisplaySize = 85;
 
@@ -186,7 +268,13 @@ namespace CandyCrushApplication {
 							: (selectionPoint.X - p.X == 1 && selectionPoint.Y == p.Y) ? 3
 							: (p.X - selectionPoint.X == 1 && selectionPoint.Y == p.Y) ? 4 : -1;
 						if (dir != -1) {
+							MovesRemaining--;
+							MovesLabel.Text = "Moves: " + MovesRemaining;
 							CandyCrushCandyMove(selectionPoint.X, selectionPoint.Y, dir);
+							if (MovesRemaining <= 0) {
+								MessageBox.Show("You are out of moves! Do you want to see the leaderboard? You lost!", "Loser!");
+								ReturnToMenu();
+							}
 							IsSelected = false;
 						} else {
 							Console.WriteLine("Invalid movement point: " + control.Name);
@@ -223,15 +311,9 @@ namespace CandyCrushApplication {
 		}
 
 		private void CloseButton_Click(object sender, EventArgs e) {
-			DialogResult dialogResult = MessageBox.Show("Are you sure you want to exit to main menu? Your points will be saved.", "Leaving so soon?", MessageBoxButtons.YesNo);
+			DialogResult dialogResult = MessageBox.Show("Are you sure you want to exit to main menu?", "Leaving so soon?", MessageBoxButtons.YesNo);
 			if (dialogResult == DialogResult.Yes) {
-				using (StreamWriter writer = new StreamWriter(Program.Player.SaveFile)) {
-					writer.WriteLine(Program.Player.Name);
-					writer.WriteLine(Program.Player.Points);
-					writer.WriteLine(Program.Player.SaveFile);
-				}
-				this.Hide();
-				Program.mainMenuForm.Show();
+				ReturnToMenu();
 			}
 		}
 

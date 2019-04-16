@@ -10,13 +10,16 @@ namespace CandyCrushApplication {
 	public struct PlayerData {
 		public string Name;
 		public int Points;
+		public int Level;
 		public string SaveFile;
 	}
-	
-	static class Program {
+
+	public static class Program {
 		public static PlayerData Player;
 		public static DirectoryInfo UserDataFolder = Directory.CreateDirectory("UserData");
-		public static Form mainMenuForm, gameForm;
+		public static CandyCrushWindow mainMenuForm;
+		public static GameForm gameForm;
+		public static ScoreboardForm scoreForm;
 
 		[DllImport("CandyCrushSega.dll", EntryPoint = "Initialize", CallingConvention = CallingConvention.StdCall)]
 		public static extern void CandyCrushInitialize();
@@ -34,6 +37,7 @@ namespace CandyCrushApplication {
 
 			mainMenuForm = new CandyCrushWindow();
             gameForm = new GameForm();
+			scoreForm = new ScoreboardForm();
             Application.Run(mainMenuForm);
 		}
 	}

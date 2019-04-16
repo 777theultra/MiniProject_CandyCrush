@@ -3,30 +3,41 @@
 #include "CandyCrush.h"
 
 void BlowUpSurrounding(CandyContainer* center) {
+	int points = 0;
 	if (center->GetNext(Up) != nullptr) {
+		if (!center->GetNext(Up)->GetEmpty()) { points++; }
 		center->GetNext(Up)->SetEmpty(true);
 		if (center->GetNext(Up)->GetNext(Left) != nullptr) {
+			if (!center->GetNext(Up)->GetNext(Left)->GetEmpty()) { points++; }
 			center->GetNext(Up)->GetNext(Left)->SetEmpty(true);
 		}
 		if (center->GetNext(Up)->GetNext(Right) != nullptr) {
+			if (!center->GetNext(Up)->GetNext(Right)->GetEmpty()) { points++; }
 			center->GetNext(Up)->GetNext(Right)->SetEmpty(true);
 		}
 	}
 	if (center->GetNext(Down) != nullptr) {
+		if (!center->GetNext(Down)->GetEmpty()) { points++; }
 		center->GetNext(Down)->SetEmpty(true);
 		if (center->GetNext(Down)->GetNext(Left) != nullptr) {
+			if (!center->GetNext(Down)->GetNext(Left)->GetEmpty()) { points++; }
 			center->GetNext(Down)->GetNext(Left)->SetEmpty(true);
 		}
 		if (center->GetNext(Down)->GetNext(Right) != nullptr) {
+			if (!center->GetNext(Down)->GetNext(Right)->GetEmpty()) { points++; }
 			center->GetNext(Down)->GetNext(Right)->SetEmpty(true);
 		}
 	}
 	if (center->GetNext(Left) != nullptr) {
+		if (!center->GetNext(Left)->GetEmpty()) { points++; }
 		center->GetNext(Left)->SetEmpty(true);
 	}
 	if (center->GetNext(Right) != nullptr) {
+		if (!center->GetNext(Right)->GetEmpty()) { points++; }
 		center->GetNext(Right)->SetEmpty(true);
 	}
+	if (!center->GetEmpty()) { points++; };
+	AppAwardPoints(points);
 	center->SetEmpty(true);
 }
 
@@ -169,11 +180,36 @@ CandyCrush::CandyCrush() {
 			}
 		}
 	} while (changed == true);
+
+	ObjectiveBColor = (std::rand() % 6);
+	ObjectiveDCombo = (std::rand() % 3);
+
+	ObjectiveBAmount = 6 + (std::rand() % 6);
+	ObjectiveDAmount = 2;
 }
 
 CandyCrush::~CandyCrush() { /*Destructor*/ }
 
-void CandyCrush::RenderBoard() {
+void CandyCrush::MinusObjectiveB() {
+	std::cout << "Decreasing ObjectiveB ";
+	ObjectiveBAmount--;
+	std::cout << " -> " << ObjectiveBAmount << std::endl;
+}
+
+int CandyCrush::GetObjectiveBAmount() {
+	return ObjectiveBAmount;
+}
+
+void CandyCrush::MinusObjectiveD() {
+	ObjectiveDAmount--;
+}
+
+int CandyCrush::GetObjectiveDAmount() {
+	return ObjectiveDAmount;
+}
+
+void CandyCrush::RenderBoard() { //Disabled
+	//if (true) { return; }
 	std::cout << std::endl;
 	std::cout << "[+]\t";
 	for (int x = 0; x < SizeX; x++) {
@@ -254,13 +290,29 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	};
 	//std::cout << std::endl;
 
+	int points = 0;
+
 	if (h > 2) {
 		std::cout << "Horizontal chain found: " << h << std::endl;
 		for (int x = 0; x < h; x++) {
 			if (hContainers[x] != NULL) {
+
+				if (!hContainers[x]->GetEmpty() && hContainers[x]->GetCandy()->GetSpecial() != Bomb && hContainers[x]->GetCandy()->GetColor() == ObjectiveBColor) {
+					MinusObjectiveB();
+				}
 				hContainers[x]->SetEmpty(true);
+
 				if (hContainers[x]->GetCandy()->GetSpecial() == Striped) {
 					for (int a = 0; a < SizeX; a++) {
+						if (!Board[hContainers[x]->Y][a].GetEmpty()) {
+							points++;
+							if (Board[hContainers[x]->Y][a].GetCandy()->GetSpecial() == Wrapped) {
+								BlowUpSurrounding(hContainers[x]);
+								hContainers[x]->SetEmpty(false);
+								hContainers[x]->GetCandy()->SetSpecial(Unwrapped);
+								std::cout << "Combo R wiping surrounding" << std::endl;
+							}
+						}
 						Board[hContainers[x]->Y][a].SetEmpty(true);
 					}
 					std::cout << "Combo P wiping row: " << hContainers[x]->Y << std::endl;
@@ -276,20 +328,39 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 			std::cout << "Combo P found" << std::endl;
 			subject->SetEmpty(false);
 			subject->GetCandy()->SetSpecial(Striped);
+			if (ObjectiveDCombo == 0) {
+				MinusObjectiveD();
+			}
 		} else if (h == 5) {
 			std::cout << "Combo S found" << std::endl;
 			subject->SetEmpty(false);
 			subject->GetCandy()->SetSpecial(Bomb);
+			if (ObjectiveDCombo == 2) {
+				MinusObjectiveD();
+			}
 		}
-		AppAwardPoints(1 * (h - 2));
+		points += (h - 2);
 	}
 	if (v > 2) {
 		std::cout << "Vertical chain found: " << h << std::endl;
 		for (int y = 0; y < v; y++) {
 			if (vContainers[y] != NULL) {
+
+				if (!vContainers[y]->GetEmpty() && vContainers[y]->GetCandy()->GetSpecial() != Bomb && vContainers[y]->GetCandy()->GetColor() == ObjectiveBColor) {
+					MinusObjectiveB();
+				}
 				vContainers[y]->SetEmpty(true);
 				if (vContainers[y]->GetCandy()->GetSpecial() == Striped) {
 					for (int a = 0; a < SizeX; a++) {
+						if (!Board[vContainers[y]->Y][a].GetEmpty()) {
+							points++;
+							if (Board[vContainers[y]->Y][a].GetCandy()->GetSpecial() == Wrapped) {
+								BlowUpSurrounding(vContainers[y]);
+								vContainers[y]->SetEmpty(false);
+								vContainers[y]->GetCandy()->SetSpecial(Unwrapped);
+								std::cout << "Combo R wiping surrounding" << std::endl;
+							}
+						}
 						Board[vContainers[y]->Y][a].SetEmpty(true);
 					}
 					std::cout << "Combo P wiping row: " << vContainers[y]->Y << std::endl;
@@ -305,14 +376,20 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 			std::cout << "Combo P found" << std::endl;
 			subject->SetEmpty(false);
 			subject->GetCandy()->SetSpecial(Striped);
+			if (ObjectiveDCombo == 0) {
+				MinusObjectiveD();
+			}
 		} else if (v == 5) {
 			std::cout << "Combo S found" << std::endl;
 			subject->SetEmpty(false);
 			subject->GetCandy()->SetSpecial(Bomb);
+			if (ObjectiveDCombo == 2) {
+				MinusObjectiveD();
+			}
 		}
-		AppAwardPoints(1 * (v - 2));
+		points += (v - 2);
 	}
-	/*
+	/* T, L Alignments
 		### #    #    #
 		 #  ###  #  ###
 		 #  #   ###   #
@@ -325,7 +402,11 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 		std::cout << "Combo R found" << std::endl;
 		subject->SetEmpty(false);
 		subject->GetCandy()->SetSpecial(Wrapped);
+		if (ObjectiveDCombo == 1) {
+			MinusObjectiveD();
+		}
 	}
+	AppAwardPoints(points);
 }
 
 void CandyCrush::CandySwap(CandyContainer* a, CandyContainer* b) {
@@ -387,11 +468,20 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 		if (!selection->GetEmpty()) {
 			if (target->GetCandy()->GetSpecial() == Bomb) {
 				std::cout << "Combo S bombing all color " << selection->GetCandy()->GetColor() << std::endl;
+
+				if (!target->GetEmpty() && target->GetCandy()->GetSpecial() != Bomb && target->GetCandy()->GetColor() == ObjectiveBColor) {
+					MinusObjectiveB();
+				}
 				target->SetEmpty(true);
 				for (int y = 0; y < SizeY; y++) {
 					for (int x = 0; x < SizeX; x++) {
 						if (Board[y][x].GetCandy()->GetColor() == selection->GetCandy()->GetColor()) {
+
+							if (!Board[y][x].GetEmpty() && Board[y][x].GetCandy()->GetSpecial() != Bomb && Board[y][x].GetCandy()->GetColor() == ObjectiveBColor) {
+								MinusObjectiveB();
+							}
 							Board[y][x].SetEmpty(true);
+							AppAwardPoints(1);
 						}
 					}
 				}
@@ -448,6 +538,13 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 				}
 			}
 		} while (changed == true);
+	}
+	std::cout << "Objectives B Color:" << ObjectiveBColor << " B Amout:" << ObjectiveBAmount << " D Combo:" << ObjectiveDAmount << std::endl;
+	if (ObjectiveDAmount <= 0) {
+		AppSetObjectiveCompleted(2);
+	}
+	if (ObjectiveBAmount <= 0) {
+		AppSetObjectiveCompleted(1);
 	}
 }
 
