@@ -34,8 +34,7 @@ public:
 	void CandySwap(CandyContainer*, CandyContainer*);
 	void CandyMove(int, int, Direction);
 	CandyContainer* GetCandyContainer(int, int);
-	int GetCandyColor(int, int);
-	int GetCandySpecial(int, int);
+	int GetRawCandy(int, int);
 private:
 	CandyContainer** Board = nullptr;
 	int** RawValues = nullptr;

@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -28,10 +29,8 @@ namespace CandyCrushApplication {
 		public static extern void CandyCrushConnectRenderer(RenderCandyCrushPointer f);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "ConnectAwardPoints", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushConnectAwardPoints(AwardPointsPointer f);
-		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandyColor", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int CandyCrushGetCandyColor(int x, int y);
-		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandySpecial", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int CandyCrushGetCandySpecial(int x, int y);
+		[DllImport("CandyCrushSega.dll", EntryPoint = "GetCandy", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int CandyCrushGetCandy(int x, int y);
 		[DllImport("CandyCrushSega.dll", EntryPoint = "CandyMove", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void CandyCrushCandyMove(int x, int y, int dir);
 
@@ -48,10 +47,11 @@ namespace CandyCrushApplication {
 
 			for (int y = 0; y < 6; y++) {
 				for (int x = 0; x < 6; x++) {
-					int CandyColor = CandyCrushGetCandyColor(x, y);
+					int CandyId = CandyCrushGetCandy(x, y);
 
 					candyGrid[x, y].BackColor = Color.Transparent;
-					switch (CandyColor) {
+					switch (CandyId) {
+						//Render Raw Candies;
 						case 0:
 							candyGrid[x, y].Image = Properties.Resources.Candy_Red;
 							break;
@@ -70,9 +70,36 @@ namespace CandyCrushApplication {
 						case 5:
 							candyGrid[x, y].Image = Properties.Resources.Candy_Purple;
 							break;
+						//Render Special Candies;
+						case 10:
+							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialRed;
+							break;
+						case 11:
+							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialOrange;
+							break;
+						case 12:
+							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialYellow;
+							break;
+						case 13:
+							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialGreen;
+							break;
+						case 14:
+							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialBlue;
+							break;
+						case 15:
+							candyGrid[x, y].Image = Properties.Resources.Candy_SpecialPurple;
+							break;
+						case 30:
+							candyGrid[x, y].Image = Properties.Resources.Candy_Choco;
+							break;
+						case -1:
+							candyGrid[x, y].Image = Properties.Resources.Candy_Dead;
+							break;
 					}
+					candyGrid[x, y].Refresh();
 				}
 			}
+			Thread.Sleep(250);
 		}
 
 		public void AwardPoints(int points) {
