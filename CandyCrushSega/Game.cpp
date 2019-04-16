@@ -29,6 +29,10 @@ void ConnectAwardPoints(void (*f)(int)) {
 	AwardPoints = f;
 }
 
+void ConnectObjectiveComplete(void (*f)(int)) {
+	ObjectiveComplete = f;
+}
+
 void AppRenderApplication(){
 	if (AppRenderApplication != NULL) {
 		RenderApplication();
@@ -45,6 +49,14 @@ void AppAwardPoints(int points) {
 		}
 	} else {
 		std::cout << "Connection: Failed to award points." << std::endl;
+	}
+}
+
+void AppSetObjectiveCompleted(int id) {
+	if (AppSetObjectiveCompleted != NULL) {
+		ObjectiveComplete(id);
+	} else {
+		std::cout << "Connection: Failed to set complete for objective " << id <<"." << std::endl;
 	}
 }
 
@@ -74,6 +86,22 @@ void CandyMove(int x, int y, int dir) {
 
 int GetCandy(int x, int y) {
 	return game.GetRawCandy(x, y);
+}
+
+int GetObjectiveBColor() {
+	return game.ObjectiveBColor;
+}
+
+int GetObjectiveBAmount() {
+	return game.GetObjectiveBAmount();
+}
+
+int GetObjectiveDCombo() {
+	return game.ObjectiveDCombo;
+}
+
+int GetObjectiveDAmount() {
+	return game.GetObjectiveDAmount();
 }
 
 void DebugBoard() {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Threading;
 
 namespace CandyCrushApplication {
 	public partial class CandyCrushWindow : Form {
@@ -45,15 +46,28 @@ namespace CandyCrushApplication {
 			this.CloseButton.BackColor = Color.Transparent;
 		}
 
+		public void SavePlayerData() {
+			using (StreamWriter writer = new StreamWriter(Program.Player.SaveFile)) {
+				writer.WriteLine(Program.Player.Name);
+				writer.WriteLine(Program.Player.Points);
+				writer.WriteLine(Program.Player.SaveFile);
+			}
+		}
+
 		private void PlayButton_Click(object sender, EventArgs e) {
+			Control control = (Control)sender;
 			if (this.NameInput.Text.Length <= 0) {
 				MessageBox.Show("Please input a valid name.", "Oops!");
 
 			} else {
 				Program.CandyCrushRestart();
 
+				Program.Player.Level = (control.Name == "PlayButton") ? 1 : (control.Name == "PlayButton2") ? 2 : 3;
+
+				DirectoryInfo LevelSaves = Directory.CreateDirectory(Program.UserDataFolder.Name + "/" + "Level" + Program.Player.Level);
+
 				string playerName = this.NameInput.Text;
-				string saveDataPath = Program.UserDataFolder.Name + "/" + playerName + ".txt";
+				string saveDataPath = Program.UserDataFolder.Name + "/" + LevelSaves.Name + "/" + playerName + ".txt";
 
 				Program.Player.SaveFile = saveDataPath;
 				if (File.Exists(saveDataPath)) {
@@ -61,18 +75,16 @@ namespace CandyCrushApplication {
 						Program.Player.Name = reader.ReadLine();
 						Program.Player.Points = Convert.ToInt32(reader.ReadLine());
 					}
-					MessageBox.Show("Welcome, " + Program.Player.Name + ". You best score is " + Program.Player.Points + " points.", "Welcome back!");
+					MessageBox.Show("Welcome, " + Program.Player.Name + ". You best score was " + Program.Player.Points + " points.", "Welcome back!");
+					Program.Player.Points = 0;
 				} else {
 					Program.Player.Name = playerName;
 					Program.Player.Points = 0;
-					using (StreamWriter writer = new StreamWriter(saveDataPath)) {
-						writer.WriteLine(Program.Player.Name);
-						writer.WriteLine(Program.Player.Points);
-						writer.WriteLine(Program.Player.SaveFile);
-					}
+					SavePlayerData();
 				}
 				this.Hide();
 				Program.gameForm.Show();
+				Program.gameForm.SetMoves(25);
 			}
 			this.NameInput.Text = "";
 		}

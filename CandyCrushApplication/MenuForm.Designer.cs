@@ -32,6 +32,7 @@ namespace CandyCrushApplication {
 			this.PlayerName = new System.Windows.Forms.Label();
 			this.Title = new System.Windows.Forms.Label();
 			this.PlayButton = new System.Windows.Forms.Button();
+			this.PlayButton2 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.CloseButton)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
@@ -99,13 +100,23 @@ namespace CandyCrushApplication {
 			// 
 			// PlayButton
 			// 
-			this.PlayButton.Location = new System.Drawing.Point(80, 275);
+			this.PlayButton.Location = new System.Drawing.Point(70, 281);
 			this.PlayButton.Name = "PlayButton";
-			this.PlayButton.Size = new System.Drawing.Size(187, 23);
+			this.PlayButton.Size = new System.Drawing.Size(102, 25);
 			this.PlayButton.TabIndex = 7;
-			this.PlayButton.Text = "Play";
+			this.PlayButton.Text = "Level 1";
 			this.PlayButton.UseVisualStyleBackColor = true;
 			this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
+			// 
+			// PlayButton2
+			// 
+			this.PlayButton2.Location = new System.Drawing.Point(178, 281);
+			this.PlayButton2.Name = "PlayButton2";
+			this.PlayButton2.Size = new System.Drawing.Size(100, 25);
+			this.PlayButton2.TabIndex = 8;
+			this.PlayButton2.Text = "Level 2";
+			this.PlayButton2.UseVisualStyleBackColor = true;
+			this.PlayButton2.Click += new System.EventHandler(this.PlayButton_Click);
 			// 
 			// CandyCrushWindow
 			// 
@@ -115,6 +126,7 @@ namespace CandyCrushApplication {
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
 			this.ClientSize = new System.Drawing.Size(347, 321);
+			this.Controls.Add(this.PlayButton2);
 			this.Controls.Add(this.PlayButton);
 			this.Controls.Add(this.CloseButton);
 			this.Controls.Add(this.NameInput);
@@ -142,6 +154,7 @@ namespace CandyCrushApplication {
 		private System.Windows.Forms.Label PlayerName;
 		private System.Windows.Forms.Label Title;
 		private System.Windows.Forms.Button PlayButton;
+		private System.Windows.Forms.Button PlayButton2;
 	}
 }
 

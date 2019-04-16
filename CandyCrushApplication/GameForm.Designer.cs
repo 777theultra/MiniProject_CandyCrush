@@ -27,6 +27,8 @@
 			this.CloseButton = new System.Windows.Forms.PictureBox();
 			this.PointsLabel = new System.Windows.Forms.Label();
 			this.NameLabel = new System.Windows.Forms.Label();
+			this.ObjectiveLabel = new System.Windows.Forms.Label();
+			this.MovesLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.CloseButton)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -70,12 +72,38 @@
 			this.NameLabel.TabIndex = 5;
 			this.NameLabel.Text = "Player: Player1";
 			// 
+			// ObjectiveLabel
+			// 
+			this.ObjectiveLabel.AutoSize = true;
+			this.ObjectiveLabel.BackColor = System.Drawing.Color.Transparent;
+			this.ObjectiveLabel.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
+			this.ObjectiveLabel.ForeColor = System.Drawing.Color.Transparent;
+			this.ObjectiveLabel.Location = new System.Drawing.Point(12, 593);
+			this.ObjectiveLabel.Name = "ObjectiveLabel";
+			this.ObjectiveLabel.Size = new System.Drawing.Size(89, 21);
+			this.ObjectiveLabel.TabIndex = 6;
+			this.ObjectiveLabel.Text = "Objective:";
+			// 
+			// MovesLabel
+			// 
+			this.MovesLabel.AutoSize = true;
+			this.MovesLabel.BackColor = System.Drawing.Color.Transparent;
+			this.MovesLabel.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.MovesLabel.ForeColor = System.Drawing.Color.Transparent;
+			this.MovesLabel.Location = new System.Drawing.Point(372, 12);
+			this.MovesLabel.Name = "MovesLabel";
+			this.MovesLabel.Size = new System.Drawing.Size(107, 25);
+			this.MovesLabel.TabIndex = 7;
+			this.MovesLabel.Text = "Moves: 25";
+			// 
 			// GameForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = global::CandyCrushApplication.Properties.Resources.GameBackground;
-			this.ClientSize = new System.Drawing.Size(593, 600);
+			this.ClientSize = new System.Drawing.Size(593, 623);
+			this.Controls.Add(this.MovesLabel);
+			this.Controls.Add(this.ObjectiveLabel);
 			this.Controls.Add(this.NameLabel);
 			this.Controls.Add(this.PointsLabel);
 			this.Controls.Add(this.CloseButton);
@@ -95,5 +123,7 @@
 		private System.Windows.Forms.PictureBox CloseButton;
 		private System.Windows.Forms.Label PointsLabel;
 		private System.Windows.Forms.Label NameLabel;
+		private System.Windows.Forms.Label ObjectiveLabel;
+		private System.Windows.Forms.Label MovesLabel;
 	}
 }
