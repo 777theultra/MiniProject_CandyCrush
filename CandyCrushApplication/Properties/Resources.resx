@@ -172,4 +172,22 @@
   <data name="Candy_Choco" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Candy_Choco.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Candy_WrappedBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Candy_WrappedBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Candy_WrappedGreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Candy_WrappedGreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Candy_WrappedOrange" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Candy_WrappedOrange.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Candy_WrappedPurple" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Candy_WrappedPurple.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Candy_WrappedRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Candy_WrappedRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Candy_WrappedYellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Candy_WrappedYellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

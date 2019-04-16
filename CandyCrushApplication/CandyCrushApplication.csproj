@@ -167,5 +167,23 @@
   <ItemGroup>
     <None Include="Resources\Candy_Choco.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_WrappedBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_WrappedGreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_WrappedOrange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_WrappedPurple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_WrappedRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Candy_WrappedYellow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

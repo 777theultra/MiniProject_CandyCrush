@@ -203,6 +203,66 @@ namespace CandyCrushApplication.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Candy_WrappedBlue {
+            get {
+                object obj = ResourceManager.GetObject("Candy_WrappedBlue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Candy_WrappedGreen {
+            get {
+                object obj = ResourceManager.GetObject("Candy_WrappedGreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Candy_WrappedOrange {
+            get {
+                object obj = ResourceManager.GetObject("Candy_WrappedOrange", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Candy_WrappedPurple {
+            get {
+                object obj = ResourceManager.GetObject("Candy_WrappedPurple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Candy_WrappedRed {
+            get {
+                object obj = ResourceManager.GetObject("Candy_WrappedRed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Candy_WrappedYellow {
+            get {
+                object obj = ResourceManager.GetObject("Candy_WrappedYellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Candy_Yellow {
             get {
                 object obj = ResourceManager.GetObject("Candy_Yellow", resourceCulture);
