@@ -1,10 +1,36 @@
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
-#include <thread>
 #include "CandyCrush.h"
 
-using namespace std::chrono_literals;
+void BlowUpSurrounding(CandyContainer* center) {
+	if (center->GetNext(Up) != nullptr) {
+		center->GetNext(Up)->SetEmpty(true);
+		if (center->GetNext(Up)->GetNext(Left) != nullptr) {
+			center->GetNext(Up)->GetNext(Left)->SetEmpty(true);
+		}
+		if (center->GetNext(Up)->GetNext(Right) != nullptr) {
+			center->GetNext(Up)->GetNext(Right)->SetEmpty(true);
+		}
+	}
+	if (center->GetNext(Down) != nullptr) {
+		center->GetNext(Down)->SetEmpty(true);
+		if (center->GetNext(Down)->GetNext(Left) != nullptr) {
+			center->GetNext(Down)->GetNext(Left)->SetEmpty(true);
+		}
+		if (center->GetNext(Down)->GetNext(Right) != nullptr) {
+			center->GetNext(Down)->GetNext(Right)->SetEmpty(true);
+		}
+	}
+	if (center->GetNext(Left) != nullptr) {
+		center->GetNext(Left)->SetEmpty(true);
+	}
+	if (center->GetNext(Right) != nullptr) {
+		center->GetNext(Right)->SetEmpty(true);
+	}
+	center->SetEmpty(true);
+}
+
+//-- CandyContainer;
 
 void CandyContainer::SetCandy(Candy candy) {
 	CandyObject = candy;
@@ -12,19 +38,6 @@ void CandyContainer::SetCandy(Candy candy) {
 
 Candy* CandyContainer::GetCandy() {
 	return &CandyObject;
-}
-
-void CandyContainer::Update() {
-	if (NextDown != nullptr) {
-		if (NextDown->IsEmpty) {
-			game.CandySwap(this, NextDown);
-			if (IsEmpty && NextUp == nullptr) {
-				CandyObject = Candy();
-				IsEmpty = false;
-			}
-			NextDown->Update();
-		}
-	}
 }
 
 CandyContainer* CandyContainer::GetNext(Direction dir) {
@@ -88,6 +101,8 @@ bool CandyContainer::GetEmpty() {
 	return IsEmpty;
 }
 
+//-- CandyCrush;
+
 CandyCrush::CandyCrush() {
 	Board = new CandyContainer * [SizeY];
 	for (int y = 0; y < SizeY; y++) {
@@ -108,6 +123,52 @@ CandyCrush::CandyCrush() {
 			}
 		}
 	}
+
+	bool changed;
+	do {
+		changed = false;
+		for (int x = 0; x < SizeX; x++) {
+			CandyContainer* column = &Board[5][x];
+			do {
+				column->ApplyGravity();
+				column = column->GetNext(Up);
+			} while (column != nullptr);
+		}
+		for (int y = 0; y < SizeY; y++) {
+			for (int x = 0; x < SizeX; x++) {
+				if (!Board[y][x].GetEmpty()) {
+					CandyScan(&Board[y][x]);
+				}
+			}
+		}
+		bool foundUnwrapped = false;
+		for (int y = 0; y < SizeY; y++) {
+			for (int x = 0; x < SizeX; x++) {
+				if (Board[y][x].GetCandy()->GetSpecial() == Unwrapped) {
+					BlowUpSurrounding(&Board[y][x]);
+					foundUnwrapped = true;
+					changed = true;
+				}
+			}
+		}
+		if (foundUnwrapped) {
+			AppRenderApplication();
+			for (int x = 0; x < SizeX; x++) {
+				CandyContainer* column = &Board[5][x];
+				do {
+					column->ApplyGravity();
+					column = column->GetNext(Up);
+				} while (column != nullptr);
+			}
+		}
+		for (int y = 0; y < SizeY; y++) {
+			for (int x = 0; x < SizeX; x++) {
+				if (Board[y][x].GetEmpty()) {
+					changed = true;
+				}
+			}
+		}
+	} while (changed == true);
 }
 
 CandyCrush::~CandyCrush() { /*Destructor*/ }
@@ -134,34 +195,6 @@ void CandyCrush::RenderBoard() {
 	}
 }
 
-void BlowUpSurrounding(CandyContainer* center) {
-	if (center->GetNext(Up) != nullptr) {
-		center->GetNext(Up)->SetEmpty(true);
-		if (center->GetNext(Up)->GetNext(Left) != nullptr) {
-			center->GetNext(Up)->GetNext(Left)->SetEmpty(true);
-		}
-		if (center->GetNext(Up)->GetNext(Right) != nullptr) {
-			center->GetNext(Up)->GetNext(Right)->SetEmpty(true);
-		}
-	}
-	if (center->GetNext(Down) != nullptr) {
-		center->GetNext(Down)->SetEmpty(true);
-		if (center->GetNext(Down)->GetNext(Left) != nullptr) {
-			center->GetNext(Down)->GetNext(Left)->SetEmpty(true);
-		}
-		if (center->GetNext(Down)->GetNext(Right) != nullptr) {
-			center->GetNext(Down)->GetNext(Right)->SetEmpty(true);
-		}
-	}
-	if (center->GetNext(Left) != nullptr) {
-		center->GetNext(Left)->SetEmpty(true);
-	}
-	if (center->GetNext(Right) != nullptr) {
-		center->GetNext(Right)->SetEmpty(true);
-	}
-	center->SetEmpty(true);
-}
-
 void CandyCrush::CandyScan(CandyContainer* subject) {
 	CandyContainer* c = subject;
 	CandyContainer* vContainers[6] = {};
@@ -170,7 +203,7 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 
 	//std::cout << "[Up]:  ";
 	do {
-		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
+		if (!c->GetEmpty() && c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
 			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			vContainers[v] = c;
 			v++;
@@ -183,7 +216,7 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	c = subject->GetNext(Down);
 	//std::cout << " [Down]: ";
 	while (c != nullptr) {
-		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
+		if (!c->GetEmpty() && c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
 			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			vContainers[v] = c;
 			v++;
@@ -197,7 +230,7 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	c = subject;
 	//std::cout << "[Left]:  ";
 	do {
-		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
+		if (!c->GetEmpty() && c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
 			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			hContainers[h] = c;
 			h++;
@@ -210,7 +243,7 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 	c = subject->GetNext(Right);
 	//std::cout << " [Right]: ";
 	while (c != nullptr) {
-		if (c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
+		if (!c->GetEmpty() && c->GetCandy()->GetColor() == subject->GetCandy()->GetColor()) {
 			//std::cout << " [" << c->GetCandy()->GetColor() << "]";
 			hContainers[h] = c;
 			h++;
@@ -220,8 +253,6 @@ void CandyCrush::CandyScan(CandyContainer* subject) {
 		c = c->GetNext(Right);
 	};
 	//std::cout << std::endl;
-
-	CandyContainer* wrapped[6] = {};
 
 	if (h > 2) {
 		std::cout << "Horizontal chain found: " << h << std::endl;
@@ -371,24 +402,9 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 		if (!target->GetEmpty()) {
 			CandyScan(target);
 		}
-		AppRenderApplication();
-		for (int x = 0; x < SizeX; x++) {
-			CandyContainer* column = &Board[5][x];
-			do {
-				column->ApplyGravity();
-				column = column->GetNext(Up);
-			} while (column != nullptr);
-		}
-		bool foundUnwrapped = false;
-		for (int y = 0; y < SizeY; y++) {
-			for (int x = 0; x < SizeX; x++) {
-				if (Board[y][x].GetCandy()->GetSpecial() == Unwrapped) {
-					BlowUpSurrounding(&Board[y][x]);
-					foundUnwrapped = true;
-				}
-			}
-		}
-		if (foundUnwrapped) {
+		bool changed;
+		do {
+			changed = false;
 			AppRenderApplication();
 			for (int x = 0; x < SizeX; x++) {
 				CandyContainer* column = &Board[5][x];
@@ -397,7 +413,41 @@ void CandyCrush::CandyMove(int x, int y, Direction dir) {
 					column = column->GetNext(Up);
 				} while (column != nullptr);
 			}
-		}
+			for (int y = 0; y < SizeY; y++) {
+				for (int x = 0; x < SizeX; x++) {
+					if (!Board[y][x].GetEmpty()) {
+						CandyScan(&Board[y][x]);
+					}
+				}
+			}
+			bool foundUnwrapped = false;
+			for (int y = 0; y < SizeY; y++) {
+				for (int x = 0; x < SizeX; x++) {
+					if (Board[y][x].GetCandy()->GetSpecial() == Unwrapped) {
+						BlowUpSurrounding(&Board[y][x]);
+						foundUnwrapped = true;
+						changed = true;
+					}
+				}
+			}
+			if (foundUnwrapped) {
+				AppRenderApplication();
+				for (int x = 0; x < SizeX; x++) {
+					CandyContainer* column = &Board[5][x];
+					do {
+						column->ApplyGravity();
+						column = column->GetNext(Up);
+					} while (column != nullptr);
+				}
+			}
+			for (int y = 0; y < SizeY; y++) {
+				for (int x = 0; x < SizeX; x++) {
+					if (Board[y][x].GetEmpty()) {
+						changed = true;
+					}
+				}
+			}
+		} while (changed == true);
 	}
 }
 

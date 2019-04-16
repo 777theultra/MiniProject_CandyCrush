@@ -6,7 +6,6 @@ class CandyContainer {
 public:
 	void SetCandy(Candy);
 	Candy* GetCandy();
-	void Update();
 
 	CandyContainer* GetNext(Direction);
 	void SetNext(CandyContainer*, Direction);

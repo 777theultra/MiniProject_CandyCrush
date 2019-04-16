@@ -7,6 +7,7 @@
 #include "CandyCrush.h"
 
 int MoveCounter = 0;
+bool GameReady = false;
 
 void Initialize() {
 	std::srand(time(0));
@@ -15,7 +16,9 @@ void Initialize() {
 
 void Restart() {
 	MoveCounter = 0;
+	GameReady = false;
 	game = CandyCrush();
+	GameReady = true;
 }
 
 void ConnectRenderer(void (*f)()) {
@@ -37,7 +40,9 @@ void AppRenderApplication(){
 
 void AppAwardPoints(int points) {
 	if (AppRenderApplication != NULL) {
-		AwardPoints(points);
+		if (GameReady) {
+			AwardPoints(points);
+		}
 	} else {
 		std::cout << "Connection: Failed to award points." << std::endl;
 	}
