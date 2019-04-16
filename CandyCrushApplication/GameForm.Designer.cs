@@ -101,7 +101,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = global::CandyCrushApplication.Properties.Resources.GameBackground;
-			this.ClientSize = new System.Drawing.Size(593, 623);
+			this.ClientSize = new System.Drawing.Size(593, 640);
 			this.Controls.Add(this.MovesLabel);
 			this.Controls.Add(this.ObjectiveLabel);
 			this.Controls.Add(this.NameLabel);

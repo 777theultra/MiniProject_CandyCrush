@@ -33,6 +33,7 @@ namespace CandyCrushApplication {
 			this.Title = new System.Windows.Forms.Label();
 			this.PlayButton = new System.Windows.Forms.Button();
 			this.PlayButton2 = new System.Windows.Forms.Button();
+			this.PlayButton3 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.CloseButton)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
@@ -100,9 +101,9 @@ namespace CandyCrushApplication {
 			// 
 			// PlayButton
 			// 
-			this.PlayButton.Location = new System.Drawing.Point(70, 281);
+			this.PlayButton.Location = new System.Drawing.Point(45, 279);
 			this.PlayButton.Name = "PlayButton";
-			this.PlayButton.Size = new System.Drawing.Size(102, 25);
+			this.PlayButton.Size = new System.Drawing.Size(80, 25);
 			this.PlayButton.TabIndex = 7;
 			this.PlayButton.Text = "Level 1";
 			this.PlayButton.UseVisualStyleBackColor = true;
@@ -110,13 +111,23 @@ namespace CandyCrushApplication {
 			// 
 			// PlayButton2
 			// 
-			this.PlayButton2.Location = new System.Drawing.Point(178, 281);
+			this.PlayButton2.Location = new System.Drawing.Point(131, 279);
 			this.PlayButton2.Name = "PlayButton2";
-			this.PlayButton2.Size = new System.Drawing.Size(100, 25);
+			this.PlayButton2.Size = new System.Drawing.Size(80, 25);
 			this.PlayButton2.TabIndex = 8;
 			this.PlayButton2.Text = "Level 2";
 			this.PlayButton2.UseVisualStyleBackColor = true;
 			this.PlayButton2.Click += new System.EventHandler(this.PlayButton_Click);
+			// 
+			// PlayButton3
+			// 
+			this.PlayButton3.Location = new System.Drawing.Point(217, 279);
+			this.PlayButton3.Name = "PlayButton3";
+			this.PlayButton3.Size = new System.Drawing.Size(80, 25);
+			this.PlayButton3.TabIndex = 9;
+			this.PlayButton3.Text = "Level 3";
+			this.PlayButton3.UseVisualStyleBackColor = true;
+			this.PlayButton3.Click += new System.EventHandler(this.PlayButton_Click);
 			// 
 			// CandyCrushWindow
 			// 
@@ -126,6 +137,7 @@ namespace CandyCrushApplication {
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
 			this.ClientSize = new System.Drawing.Size(347, 321);
+			this.Controls.Add(this.PlayButton3);
 			this.Controls.Add(this.PlayButton2);
 			this.Controls.Add(this.PlayButton);
 			this.Controls.Add(this.CloseButton);
@@ -155,6 +167,7 @@ namespace CandyCrushApplication {
 		private System.Windows.Forms.Label Title;
 		private System.Windows.Forms.Button PlayButton;
 		private System.Windows.Forms.Button PlayButton2;
+		private System.Windows.Forms.Button PlayButton3;
 	}
 }
 
